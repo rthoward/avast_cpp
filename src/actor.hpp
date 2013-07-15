@@ -5,6 +5,9 @@ public:
    void render() const;
    void move(int x, int y);
 
+   int getX();
+   int getY();
+
 private:
    int x, y;
    int ch;
