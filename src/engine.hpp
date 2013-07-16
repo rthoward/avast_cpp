@@ -6,6 +6,10 @@ public:
    void update();
    void render();
 
+   TCODList<Actor *> getActorList();
+   Actor* getPlayer();
+   Map* getMap();
+
 private:
    TCODList<Actor *> actors;
    Actor *player;

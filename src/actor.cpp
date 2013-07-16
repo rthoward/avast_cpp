@@ -14,5 +14,10 @@ void Actor::move(int x, int y) {
    this->y += y;
 }
 
+void Actor::moveTo(int x, int y) {
+   this->x = x;
+   this->y = y;
+}
+
 int Actor::getX()   { return x; }
 int Actor::getY()   { return y; }

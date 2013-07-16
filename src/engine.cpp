@@ -56,3 +56,16 @@ void Engine::render() {
       (*iter)->render();
    }
 }
+
+
+TCODList<Actor *> Engine::getActorList() {
+   return actors;
+}
+
+Actor* Engine::getPlayer() {
+   return player;
+}
+
+Map* Engine::getMap() {
+   return map;
+}
