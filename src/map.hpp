@@ -1,6 +1,6 @@
 struct Tile {
-   bool canWalk;
-   Tile() : canWalk(false) {}
+   bool explored;
+   Tile() : explored(false) {}
 };
 
 class Map {
@@ -12,10 +12,15 @@ public:
    bool isWall(int x, int y) const;
    void render() const;
 
+   bool isInFov(int x, int y) const;
+   bool isExplored(int x, int y) const;
+   void computeFov();
+
 protected:
 
    int width, height;
    Tile *tiles;
+   TCODMap *map;
    friend class BspListener;
 
    void dig(int x1, int y1, int x2, int y2);
