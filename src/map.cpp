@@ -1,10 +1,11 @@
 #include "libtcod.hpp"
-#include "map.hpp"
 #include "actor.hpp"
+#include "map.hpp"
 #include "engine.hpp"
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
+static const int ROOM_MAX_MONSTERS = 3;
 
 class BspListener : public ITCODBspCallback {
 public:
@@ -71,6 +72,21 @@ bool Map::isInFov(int x, int y) const {
    return false;
 }
 
+bool Map::canWalk(int x, int y) const {
+   if (isWall(x, y))
+      return false;
+
+   // check for potential collision with actor
+   for (Actor **iter = engine.getActorList().begin();
+         iter != engine.getActorList().end(); iter++) {
+      Actor *actor = *iter;
+      if (actor->getX() == x && actor->getY() == y)
+         return false;
+   }
+
+   return true;
+}
+
 void Map::computeFov() {
    Actor *player = engine.getPlayer();
    map->computeFov(player->getX(), player->getY(),
@@ -120,14 +136,46 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 
    // add player to first room
    // otherwise, random chance of adding NPC
-   if (first)
+   if (first) {
       engine.getPlayer()->moveTo((x1 + x2) / 2, (y1 + y2) / 2);
+   }
    else {
       TCODRandom *rng = TCODRandom::getInstance();
-      if (rng->getInt(0,3) == 0) {
-         engine.getActorList().push(new Actor((x1 + x2) / 2, (y1 + y2) / 2, '@',
-                  TCODColor::yellow));
+      int numMonsters = rng->getInt(0, ROOM_MAX_MONSTERS);
+
+      while(numMonsters > 0) {
+         int x = rng->getInt(x1, x2);
+         int y = rng->getInt(y1, y2);
+         if (canWalk(x, y)) {
+            addMonster(x, y);
+         }
+         else {
+         }
+         numMonsters--;
       }
+   }
+
+}
+
+void Map::addMonster(int x, int y) {
+   TCODRandom *rng = TCODRandom::getInstance();
+
+   if (rng->getInt(0, 100) < 80) {
+      engine.addActor(new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen));
+   } else {
+      engine.addActor(new Actor(x, y, 'T', "troll", TCODColor::darkerGreen));
    }
 }
 
+Actor* Map::getActorAt(int x, int y) const {
+   Actor *actor;
+
+   for (Actor **iter = engine.getActorList().begin();
+         iter != engine.getActorList().end(); iter++) {
+      actor = *iter;
+      if (actor->getX() == x && actor->getY() == y)
+         return actor;
+   }
+
+      return NULL;
+}
