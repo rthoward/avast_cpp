@@ -1,16 +1,25 @@
 #include "libtcod.hpp"
+#include "destructible.hpp"
+#include "attacker.hpp"
+#include "ai.hpp"
 #include "actor.hpp"
 #include "engine.hpp"
 #include "map.hpp"
 #include <string>
 
-Engine::Engine() {
+Engine::Engine(int screenWidth, int screenHeight) {
+   setStatus(STARTUP);
    fovRadius = 10;
    computeFov = true;
+   this->screenWidth = screenWidth;
+   this->screenHeight = screenHeight;
    TCODConsole::setCustomFont("dejavu12x12_gs_tc.png", TCOD_FONT_LAYOUT_TCOD | TCOD_FONT_TYPE_GREYSCALE);
-   TCODConsole::initRoot(80, 50, "cpp roguelike", false);
+   TCODConsole::initRoot(screenWidth, screenHeight, "cpp roguelike", false);
    std::string playerName = "Player";
    player = new Actor(40, 25, '@', playerName, TCODColor::white);
+   player->setDestructible(new PlayerDestructible(30, 2, "your cadaver"));
+   player->setAttacker(new Attacker(5));
+   player->setAI(new PlayerAI());
    actors.push(player);
    map = new Map(80, 45);
 }
@@ -21,44 +30,19 @@ Engine::~Engine() {
 }
 
 void Engine::update() {
-   TCOD_key_t key;
-   TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL);
-
-   switch(key.vk) {
-      case TCODK_UP : 
-         if (!map->isWall(player->getX(), player->getY() - 1)) {
-            player->moveOrAttack(0, -1);   
-            setStatus(NEW_TURN);
-         }
-      break;
-      case TCODK_DOWN : 
-         if (!map->isWall(player->getX(), player->getY() + 1)) {
-            player->moveOrAttack(0, 1);
-            setStatus(NEW_TURN);
-         }
-      break;
-      case TCODK_LEFT : 
-         if (!map->isWall(player->getX() - 1, player->getY())) {
-            player->moveOrAttack(-1, 0);
-            setStatus(NEW_TURN);
-         }
-      break;
-      case TCODK_RIGHT : 
-         if (!map->isWall(player->getX() + 1,player->getY())) {
-            player->moveOrAttack(1, 0);
-            setStatus(NEW_TURN);
-         }
-      break;
-
-      default: break;
-   }
-
-   // depending on state, recompute fov and update actors
-   if (gameStatus == NEW_TURN || gameStatus == STARTUP) {
+   if (gameStatus == STARTUP)
       map->computeFov();
-      for (Actor **iterator=actors.begin(); iterator != actors.end(); iterator++) {
+
+   gameStatus = IDLE;
+   TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
+   player->update();
+
+   // update all non-player actors
+   if (gameStatus == NEW_TURN) {
+      for (Actor **iterator = actors.begin();
+           iterator != actors.end(); iterator++) {
          Actor *actor = *iterator;
-         if ( actor != player )
+         if (actor != player)
             actor->update();
       }
    }
@@ -68,16 +52,27 @@ void Engine::render() {
    TCODConsole::root->clear();
 
    map->render();
+   TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d",
+         (int)player->getDestructible()->getHP(), 
+         (int)player->getDestructible()->getHPMax());
 
+   // render actors
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (map->isInFov(actor->getX(), actor->getY()))
+      if (actor != player && map->isInFov(actor->getX(), actor->getY()))
             actor->render();
    }
+
+   player->render();
 }
 
 void Engine::addActor(Actor *actor) {
    this->actors.push(actor);
+}
+
+void Engine::sendToFront(Actor *actor) {
+   actors.remove(actor);
+   actors.insertBefore(actor, 0);
 }
 
 TCODList<Actor *> Engine::getActorList() {
@@ -94,6 +89,10 @@ Map* Engine::getMap() {
 
 Engine::GameStatus Engine::getStatus() {
    return gameStatus;
+}
+
+TCOD_key_t Engine::getLastKey() {
+   return this->lastKey;
 }
 
 void Engine::setStatus(enum GameStatus status) {

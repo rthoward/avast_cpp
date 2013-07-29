@@ -1,3 +1,6 @@
+#ifndef __ENGINE_HPP__
+#define __ENGINE_HPP__
+
 // forward include
 class Map;
 
@@ -9,6 +12,11 @@ private:
    Map *map;
    bool computeFov;
 
+   int screenWidth, screenHeight;
+   TCOD_key_t lastKey;
+
+public:
+
    enum GameStatus {
       STARTUP,
       IDLE,
@@ -17,17 +25,18 @@ private:
       DEFEAT
    } gameStatus;
 
-public:
-   Engine();
+   Engine(int screenWidth, int screenHeight);
    ~Engine();
    void update();
    void render();
 
    void addActor(Actor *actor);
+   void sendToFront(Actor *actor);
 
    TCODList<Actor *> getActorList();
    Actor* getPlayer();
    Map* getMap();
+   TCOD_key_t getLastKey();
    enum GameStatus getStatus();
 
    void setStatus(enum GameStatus status);
@@ -36,3 +45,5 @@ public:
 };
 
 extern Engine engine;
+
+#endif

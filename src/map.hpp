@@ -1,3 +1,6 @@
+#ifndef __MAP_HPP__
+#define __MAP_HPP__
+
 struct Tile {
    bool explored;
    Tile() : explored(false) {}
@@ -30,3 +33,5 @@ protected:
    void dig(int x1, int y1, int x2, int y2);
    void createRoom(bool first, int x1, int y1, int x2, int y2);
 };
+
+#endif

@@ -24,11 +24,12 @@ protected:
 class MonsterAI : public AI {
 
 public:
+   MonsterAI();
    void update(Actor *me);
 
 protected:
    void moveOrAttack(Actor *me, int targetx, int targety);
-
+   int moveCount;
 };
 
 #endif

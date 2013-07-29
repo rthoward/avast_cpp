@@ -1,7 +1,11 @@
 #include "libtcod.hpp"
+#include "destructible.hpp"
+#include "attacker.hpp"
+#include "ai.hpp"
 #include "actor.hpp"
 #include "map.hpp"
 #include "engine.hpp"
+#include <stdio.h>
 
 static const int ROOM_MAX_SIZE = 12;
 static const int ROOM_MIN_SIZE = 6;
@@ -45,7 +49,7 @@ Map::Map(int width, int height) : width(width), height(height) {
    tiles = new Tile[width * height];
    map = new TCODMap(width, height);
    TCODBsp bsp(0, 0, width, height);
-   bsp.splitRecursive(NULL, 8, ROOM_MIN_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
+   bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
    BspListener listener(*this);
    bsp.traverseInvertedLevelOrder(&listener, NULL);
 }
@@ -76,11 +80,10 @@ bool Map::canWalk(int x, int y) const {
    if (isWall(x, y))
       return false;
 
-   // check for potential collision with actor
-   for (Actor **iter = engine.getActorList().begin();
-         iter != engine.getActorList().end(); iter++) {
-      Actor *actor = *iter;
-      if (actor->getX() == x && actor->getY() == y)
+   Actor *actor;
+
+   if ( (actor = getActorAt(x, y)) ) {
+      if (actor->isBlocking())
          return false;
    }
 
@@ -102,7 +105,7 @@ void Map::render() const {
    for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
          if (isInFov(x, y))
-            TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? lightWall : lightGround); 
+            TCODConsole::root->setCharBackground(x, y, isWall(x, y) ? lightWall : lightGround);
          else if (isExplored(x, y))
             TCODConsole::root->setCharBackground(x, y, isWall(x,y) ? darkWall : darkGround);
       }
@@ -161,21 +164,24 @@ void Map::addMonster(int x, int y) {
    TCODRandom *rng = TCODRandom::getInstance();
 
    if (rng->getInt(0, 100) < 80) {
-      engine.addActor(new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen));
-   } else {
-      engine.addActor(new Actor(x, y, 'T', "troll", TCODColor::darkerGreen));
+      Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
+      orc->setDestructible(new MonsterDestructible(10, 0, "dead orc"));
+      orc->setAttacker(new Attacker(3));
+      orc->setAI(new MonsterAI());
+      engine.addActor(orc);
    }
+   // } else {
+   //    engine.addActor(new Actor(x, y, 'T', "troll", TCODColor::darkerGreen));
+   // }
 }
 
 Actor* Map::getActorAt(int x, int y) const {
-   Actor *actor;
-
    for (Actor **iter = engine.getActorList().begin();
          iter != engine.getActorList().end(); iter++) {
-      actor = *iter;
-      if (actor->getX() == x && actor->getY() == y)
+      Actor *actor = *iter;
+      if (actor != NULL && actor->getX() == x && actor->getY() == y)
          return actor;
    }
 
-      return NULL;
+   return NULL;
 }

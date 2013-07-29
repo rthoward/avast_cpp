@@ -24,7 +24,6 @@ float Destructible::takeDamage(Actor *me, float damage) {
 void Destructible::die(Actor *me) {
    // turn actor into corpse
    me->setGlyph('%');
-   // me->color = TCODColor::darkRed; why?
    me->setName(corpseName);
    engine.sendToFront(me);
 }
@@ -34,7 +33,6 @@ MonsterDestructible::MonsterDestructible(float maxHp, float defense, const char 
 }
 
 void MonsterDestructible::die(Actor *me) {
-   cout << me->getName() << " is dead.\n";
 	Destructible::die(me);
 }
 
