@@ -1,0 +1,23 @@
+# Actors
+
+Actors are the main entities of the game. Monsters, NPCs and the Player are all
+actors. 
+
+## Actors and the Game Engine
+
+The game engine stores a list of all actors which is used in both rendering and
+logic. The Map class has methods which allows one to query the positions of
+different actors and the tiles that they inhabit.
+
+## Actor Capabilities
+
+Actors are the most important aspect of the game, as well as the most complex.
+Because of their wide range of actions, it makes sense to separate their
+capabilities in a modular way. I did this using composition.
+
+Any given actor may have up to (currently) 3 components which determine its
+behavior:
+
+   * __Attacker__: determines how actors attack, as well as their power
+   * __Defender__: determines defense and death
+   * __AI__: movement logic, aggression, pathfinding, etc
