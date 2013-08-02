@@ -35,7 +35,6 @@ bool Actor::moveOrAttack(int dx, int dy) {
       return false;
 
    if ( (collider = map->getActorAt(newX, newY)) ){
-      printf("colliding with actor %s\n", collider->getName().c_str());
       return false;
    }
 

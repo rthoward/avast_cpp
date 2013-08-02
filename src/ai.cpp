@@ -49,7 +49,6 @@ bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
 
       // living actor present. attack!
       if (actor->getDestructible() && !actor->getDestructible()->isDead()) {
-         cout << "found living actor\n";
          me->getAttacker()->attack(me, actor);
          return false;
       }
@@ -72,13 +71,11 @@ void MonsterAI::update(Actor *me) {
    // if player is in fov, move toward him / her
    if (engine.getMap()->isInFov(me->getX(), me->getY())) {
       moveCount = MONS_TRACKING_TURNS;
-      printf("monster %d sees you!\n", me->getID());      
    } else {
       moveCount--; 
    }
 
    if (moveCount > 0) {
-      printf("monster %d moving\n", me->getID());
       Actor *player = engine.getPlayer();
       moveOrAttack(me, player->getX(), player->getY());
    }
@@ -108,5 +105,4 @@ void MonsterAI::moveOrAttack(Actor *me, int targetx, int targety) {
       me->getAttacker()->attack(me, engine.getPlayer());
    }
 
-   printf("tried to move (%d, %d)\n", dx, dy);
 }

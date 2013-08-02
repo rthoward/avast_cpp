@@ -5,6 +5,7 @@
 #include "actor.hpp"
 #include "engine.hpp"
 #include "map.hpp"
+#include "gui.hpp"
 #include <string>
 
 Engine::Engine(int screenWidth, int screenHeight) {
@@ -21,12 +22,16 @@ Engine::Engine(int screenWidth, int screenHeight) {
    player->setAttacker(new Attacker(5));
    player->setAI(new PlayerAI());
    actors.push(player);
-   map = new Map(80, 45);
+   map = new Map(80, 43);
+   gui = new GUI();
+
+   gui->message(TCODColor::lightGrey, "Welcome to the dungeons of danger!");
 }
 
 Engine::~Engine() {
    actors.clearAndDelete();
    delete map;
+   delete gui;
 }
 
 void Engine::update() {
@@ -64,6 +69,7 @@ void Engine::render() {
    }
 
    player->render();
+   gui->render();
 }
 
 void Engine::addActor(Actor *actor) {
@@ -94,6 +100,11 @@ Engine::GameStatus Engine::getStatus() {
 TCOD_key_t Engine::getLastKey() {
    return this->lastKey;
 }
+
+int Engine::getScreenWidth() const     { return screenWidth; }
+int Engine::getScreenHeight() const    { return screenHeight; }
+
+GUI *Engine::getGUI()           { return this->gui; }
 
 void Engine::setStatus(enum GameStatus status) {
    gameStatus = status;

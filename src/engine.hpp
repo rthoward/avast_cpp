@@ -3,6 +3,8 @@
 
 // forward include
 class Map;
+class GUI;
+class Actor;
 
 class Engine {
 
@@ -10,6 +12,7 @@ private:
    TCODList<Actor *> actors;
    Actor *player;
    Map *map;
+   GUI *gui;
    bool computeFov;
 
    int screenWidth, screenHeight;
@@ -38,6 +41,9 @@ public:
    Map* getMap();
    TCOD_key_t getLastKey();
    enum GameStatus getStatus();
+   int getScreenWidth() const;
+   int getScreenHeight() const;
+   GUI *getGUI();
 
    void setStatus(enum GameStatus status);
 

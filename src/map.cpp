@@ -176,12 +176,16 @@ void Map::addMonster(int x, int y) {
 }
 
 Actor* Map::getActorAt(int x, int y) const {
-   for (Actor **iter = engine.getActorList().begin();
-         iter != engine.getActorList().end(); iter++) {
+
+   TCODList<Actor *> actors = engine.getActorList();
+
+   for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor != NULL && actor->getX() == x && actor->getY() == y)
+      if (actor == NULL)
+         printf("actor is null. this shouldn't be happening\n");
+      else if (actor->getX() == x && actor->getY() == y)
          return actor;
    }
-
+   
    return NULL;
 }
