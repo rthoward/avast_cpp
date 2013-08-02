@@ -4,6 +4,7 @@
 #include "destructible.hpp"
 #include "engine.hpp"
 #include <stdarg.h>
+#include <stdio.h>
 
 static const int PANEL_HEIGHT = 7;
 static const int BAR_WIDTH = 20;
@@ -67,7 +68,30 @@ void GUI::renderBar(int x, int y, int width, string name, float value,
 }
 
 void GUI::message(const TCODColor &col, const char *text, ...) {
+   va_list ap;
+   char buf[128];
+   va_start(ap, text);
+   sprintf(buf, text, ap);
+   va_end(ap);
 
+   char *lineBegin = buf;
+   char * lineEnd;
+
+   do {
+      if (log.size() == MSG_HEIGHT) {
+         Message *toRemove = log.get(0);
+         log.remove(toRemove);
+         delete toRemove;
+      }
+
+      lineEnd = strchr(lineBegin, '\n');
+      if (lineEnd)
+         *lineEnd = '\0';
+
+      Message *msg = new Message(lineBegin, col);
+      log.push(msg);
+      lineBegin = lineEnd + 1;
+   } while (lineEnd);
 }
 
 GUI::Message::Message(string text, const TCODColor &col) :
