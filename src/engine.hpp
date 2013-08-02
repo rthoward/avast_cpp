@@ -43,6 +43,7 @@ public:
    enum GameStatus getStatus();
    int getScreenWidth() const;
    int getScreenHeight() const;
+   GUI *getGUI();
 
    void setStatus(enum GameStatus status);
 

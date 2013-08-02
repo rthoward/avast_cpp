@@ -24,6 +24,8 @@ Engine::Engine(int screenWidth, int screenHeight) {
    actors.push(player);
    map = new Map(80, 43);
    gui = new GUI();
+
+   gui->message(TCODColor::lightGrey, "Welcome to the dungeons of danger!");
 }
 
 Engine::~Engine() {
@@ -101,6 +103,8 @@ TCOD_key_t Engine::getLastKey() {
 
 int Engine::getScreenWidth() const     { return screenWidth; }
 int Engine::getScreenHeight() const    { return screenHeight; }
+
+GUI *Engine::getGUI()           { return this->gui; }
 
 void Engine::setStatus(enum GameStatus status) {
    gameStatus = status;
