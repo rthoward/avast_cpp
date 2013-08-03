@@ -15,6 +15,7 @@ class Actor {
 
 public:
    Actor(int x, int y, int ch, string name, const TCODColor &col);
+   ~Actor();
    void render() const;
    void update();
    bool moveOrAttack(int dx, int dy);
