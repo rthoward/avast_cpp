@@ -8,6 +8,8 @@ using namespace std;
 class Attacker;
 class Destructible;
 class AI;
+class Pickable;
+class Container;
 
 class Actor {
 
@@ -39,17 +41,22 @@ public:
    bool isDead() const;
 
 private:
+
+   // properties
    int x, y;
    int ch;
    string name;
    TCODColor color;
    static int ACTOR_ID;
    const int id;
-
    bool blocks;
+
+   // compositional behavior objects
    Attacker *attacker;
    Destructible *destructible;
    AI *ai;
+   Pickable *pickable;
+   Container *container;
 };
 
 #endif

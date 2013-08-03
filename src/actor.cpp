@@ -2,6 +2,8 @@
 #include "destructible.hpp"
 #include "attacker.hpp"
 #include "ai.hpp"
+#include "pickable.hpp"
+#include "container.hpp"
 #include "actor.hpp"
 #include "map.hpp"
 #include "engine.hpp"
@@ -11,7 +13,8 @@ int Actor::ACTOR_ID = 0;
 
 Actor::Actor(int x, int y, int ch, string name, const TCODColor &col) :
    x(x), y(y), ch(ch), name(name), color(col), id(ACTOR_ID++),
-   blocks(true), attacker(NULL), destructible(NULL), ai(NULL) {}
+   blocks(true), attacker(NULL), destructible(NULL), ai(NULL),
+   pickable(NULL), container(NULL) {}
 
 void Actor::render() const {
    TCODConsole::root->setChar(x, y, ch);
