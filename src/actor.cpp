@@ -60,20 +60,18 @@ void Actor::moveTo(int x, int y) {
    this->y = y;
 }
 
-int Actor::getX() const          { return x; }
-int Actor::getY() const          { return y; }
-int Actor::getID() const         { return id; }
-string Actor::getName() const    { return name; }
-Destructible* Actor::getDestructible() const {
-   return this->destructible;
-}
-Attacker* Actor::getAttacker() const {
-   return this->attacker;
-}
+int Actor::getX() const                            { return x; }
+int Actor::getY() const                            { return y; }
+int Actor::getID() const                           { return id; }
+string Actor::getName() const                      { return name; }
+Destructible* Actor::getDestructible() const       { return this->destructible; }
+Attacker* Actor::getAttacker() const               { return this->attacker; }
+Container* Actor::getContainer() const             { return this->container; }
+Pickable* Actor::getPickable() const               { return this->pickable; }
 
-void Actor::setGlyph(int glyph)        { this->ch = glyph; }
-void Actor::setName(string name)       { this->name = name; }
-void Actor::setBlocks(bool blocks)     { this->blocks = blocks; }
+void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
+void Actor::setName(string name)                   { this->name = name; }
+void Actor::setBlocks(bool blocks)                 { this->blocks = blocks; }
 void Actor::setDestructible(Destructible *dest )   { this->destructible = dest; }
 void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }

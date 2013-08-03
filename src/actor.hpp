@@ -28,6 +28,8 @@ public:
    string getName() const;
    Destructible* getDestructible() const;
    Attacker* getAttacker() const;
+   Container *getContainer() const;
+   Pickable *getPickable() const;
 
    // mutators
    void setGlyph(int glyph);
