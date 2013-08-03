@@ -21,6 +21,17 @@ float Destructible::takeDamage(Actor *me, float damage) {
    return damage;
 }
 
+float Destructible::heal(float amount) {
+   hp += amount;
+
+   if (hp > hpMax) {
+      amount -= hp - hpMax;
+      hp = hpMax;
+   }
+
+   return amount;
+}
+
 void Destructible::die(Actor *me) {
    // turn actor into corpse
    me->setGlyph('%');
