@@ -34,6 +34,7 @@ public:
    void render();
 
    void addActor(Actor *actor);
+   void removeActor(Actor *actor);
    void sendToFront(Actor *actor);
 
    TCODList<Actor *> getActorList();

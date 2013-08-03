@@ -2,7 +2,10 @@
 #include "actor.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
+#include "pickable.hpp"
+#include "container.hpp"
 #include "engine.hpp"
+#include "gui.hpp"
 #include "map.hpp"
 #include "ai.hpp"
 #include <iostream>
@@ -11,6 +14,8 @@
 using namespace std;
 
 static const int MONS_TRACKING_TURNS = 3;
+
+AI::~AI() {};
 
 void PlayerAI::update(Actor *me) {
 
@@ -24,7 +29,8 @@ void PlayerAI::update(Actor *me) {
       case TCODK_DOWN   : dy += 1; break;
       case TCODK_LEFT   : dx -= 1; break;
       case TCODK_RIGHT  : dx += 1; break;
-      default: break;
+      case TCODK_CHAR   : handleActionKey(me, engine.getLastKey().c); break;
+      default           : break;
    }
 
    if ( (dx + dy) != 0) {
@@ -35,32 +41,108 @@ void PlayerAI::update(Actor *me) {
    }
 }
 
-bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
+void PlayerAI::handleActionKey(Actor *me, int ascii) {
 
-   Map *map = engine.getMap();
-   Actor *actor = NULL;
+   string invalid  = "Not a recognized action.";
+   Actor *item;
+
+   switch (ascii) {
+      case 'i' :
+         item = chooseFromInventory(me);
+         if (item) {
+            item->getPickable()->use(item, me);
+            engine.setStatus(Engine::NEW_TURN);
+         }
+         break;
+      case ',' :
+         me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
+         break;
+      default  :
+         engine.getGUI()->message(invalid, TCODColor::lightRed);
+         break;
+   }
+}
+
+bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
 
    // stop player from running in to wall
    if (engine.getMap()->isWall(targetx, targety))
       return false;
 
-   // actor present
-   if ( (actor = map->getActorAt(targetx, targety)) ) {
-
-      // living actor present. attack!
-      if (actor->getDestructible() && !actor->getDestructible()->isDead()) {
-         me->getAttacker()->attack(me, actor);
-         return false;
-      }
-      // corpse present. notify player
-      else if (actor->getDestructible() && actor->getDestructible()->isDead()) {
-         cout << "There's a " << actor->getName() << " here\n";
-      }
+   Actor *actor = engine.getMap()->getActorAt(targetx, targety);
+   if (actor == NULL) {
+      me->moveTo(targetx, targety);
+      return true;
+   }
+   else if (actor->getType() == Actor::MONSTER) {
+      me->getAttacker()->attack(me, actor);
+      return false;
+   } else {
+      checkTile(actor);
+      me->moveTo(targetx, targety);
+      return true;
    }
 
-   me->moveTo(targetx, targety);
-   return true;
+   return false;
 }
+
+void PlayerAI::checkTile(Actor *actor) {
+
+   string msg = "";
+
+   switch (actor->getType()) {
+      case Actor::ITEM:
+         msg = "You see here a "; msg += actor->getName() + ".";
+         engine.getGUI()->message(msg);
+         break;
+      case Actor::CORPSE:
+         msg = "There is a "; msg += actor->getName() + " here.";
+         engine.getGUI()->message(msg);
+         break;
+      default: break;
+   }
+}
+
+Actor *PlayerAI::chooseFromInventory(Actor *me) {
+   static const int INV_WIDTH = 50;
+   static const int INV_HEIGHT = 28;
+   static TCODConsole con(INV_WIDTH, INV_HEIGHT);
+
+   con.setDefaultForeground(TCODColor(200, 180, 50));
+   con.printFrame(0, 0, INV_WIDTH, INV_HEIGHT, true, TCOD_BKGND_DEFAULT,
+         "inventory");
+   con.setDefaultForeground(TCODColor::white);
+   int shortcut = 'a';
+   int y = 1;
+
+   TCODList<Actor *> inventory = me->getContainer()->getInventory();
+   Actor *item;
+
+   for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
+      item = *iter;
+      con.print(2, y, "(%c) - %s", shortcut, item->getName().c_str());
+      y++;
+      shortcut++;
+   }
+
+   TCODConsole::blit(&con, 0, 0, INV_WIDTH, INV_HEIGHT, TCODConsole::root,
+         engine.getScreenWidth() / 2 - INV_WIDTH / 2,
+         engine.getScreenHeight() / 2 - INV_HEIGHT / 2);
+   TCODConsole::flush();
+
+   TCOD_key_t key;
+   TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+
+   if (key.vk == TCODK_CHAR) {
+      int itemIndex = key.c - 'a';
+      if (itemIndex >= 0 && itemIndex < inventory.size())
+         return inventory.get(itemIndex);
+   }
+
+   return NULL;
+}
+
+// monster AI -----------------------------------------------------------------
 
 MonsterAI::MonsterAI() : moveCount(3) {};
 
@@ -72,7 +154,7 @@ void MonsterAI::update(Actor *me) {
    if (engine.getMap()->isInFov(me->getX(), me->getY())) {
       moveCount = MONS_TRACKING_TURNS;
    } else {
-      moveCount--; 
+      moveCount--;
    }
 
    if (moveCount > 0) {

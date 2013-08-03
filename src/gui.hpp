@@ -10,7 +10,7 @@ public:
    GUI();
    ~GUI();
    void render();
-   void message(const TCODColor &col, const char *text, ...);
+   void message(string text, const TCODColor &col = TCODColor::lightGrey);
 
 protected:
    TCODConsole *con;

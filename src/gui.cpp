@@ -3,13 +3,14 @@
 #include "actor.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
-#include <stdarg.h>
+#include <string.h>
 #include <stdio.h>
 
 static const int PANEL_HEIGHT = 7;
 static const int BAR_WIDTH = 20;
 static const int MSG_X = BAR_WIDTH + 2;
 static const int MSG_HEIGHT = PANEL_HEIGHT - 1;
+static const int MSG_WIDTH = engine.getScreenWidth() - MSG_X;
 
 GUI::GUI() {
    con = new TCODConsole(engine.getScreenWidth(), PANEL_HEIGHT);
@@ -67,31 +68,15 @@ void GUI::renderBar(int x, int y, int width, string name, float value,
          "%s : %g / %g", name.c_str(), value, maxValue);
 }
 
-void GUI::message(const TCODColor &col, const char *text, ...) {
-   va_list ap;
-   char buf[128];
-   va_start(ap, text);
-   sprintf(buf, text, ap);
-   va_end(ap);
+void GUI::message(string text, const TCODColor &col) {
+   if (log.size() == MSG_HEIGHT) {
+      Message *toRemove = log.get(0);
+      log.remove(toRemove);
+      delete toRemove;
+   }
 
-   char *lineBegin = buf;
-   char * lineEnd;
-
-   do {
-      if (log.size() == MSG_HEIGHT) {
-         Message *toRemove = log.get(0);
-         log.remove(toRemove);
-         delete toRemove;
-      }
-
-      lineEnd = strchr(lineBegin, '\n');
-      if (lineEnd)
-         *lineEnd = '\0';
-
-      Message *msg = new Message(lineBegin, col);
-      log.push(msg);
-      lineBegin = lineEnd + 1;
-   } while (lineEnd);
+   Message *msg = new Message(text, col);
+   log.push(msg);
 }
 
 GUI::Message::Message(string text, const TCODColor &col) :

@@ -10,8 +10,10 @@ class Destructible {
 public:
 
    Destructible(float hpMax, float def, string corpseName);
+   virtual ~Destructible();
 
    float takeDamage(Actor *me, float damage);
+   float heal(float amount);
    virtual void die(Actor *me);
 
    inline bool isDead() { return hp <= 0; }

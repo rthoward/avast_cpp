@@ -18,10 +18,13 @@ public:
    bool isInFov(int x, int y) const;
    bool isExplored(int x, int y) const;
    bool canWalk(int x, int y) const;
-   Actor* getActorAt(int x, int y) const;
    void computeFov();
 
+   Actor* getActorAt(int x, int y) const;
+   Actor* getItemAt(int x, int y)  const;
+
    void addMonster(int x, int y);
+   void addItem(int x, int y);
 
 protected:
 

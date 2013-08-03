@@ -1,6 +1,7 @@
 #include "libtcod.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
+#include "container.hpp"
 #include "ai.hpp"
 #include "actor.hpp"
 #include "engine.hpp"
@@ -21,11 +22,12 @@ Engine::Engine(int screenWidth, int screenHeight) {
    player->setDestructible(new PlayerDestructible(30, 2, "your cadaver"));
    player->setAttacker(new Attacker(5));
    player->setAI(new PlayerAI());
+   player->setContainer(new Container(26));
    actors.push(player);
    map = new Map(80, 43);
    gui = new GUI();
 
-   gui->message(TCODColor::lightGrey, "Welcome to the dungeons of danger!");
+   gui->message("Welcome to the dungeons of danger!");
 }
 
 Engine::~Engine() {
@@ -74,6 +76,10 @@ void Engine::render() {
 
 void Engine::addActor(Actor *actor) {
    this->actors.push(actor);
+}
+
+void Engine::removeActor(Actor *actor) {
+   this->actors.remove(actor);
 }
 
 void Engine::sendToFront(Actor *actor) {

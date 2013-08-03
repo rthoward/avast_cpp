@@ -10,15 +10,20 @@ public:
 
    virtual void update(Actor *me)=0;
 
+   virtual ~AI();
+
 };
 
 class PlayerAI : public AI {
 
 public:
    void update(Actor *me);
+   void handleActionKey(Actor *me, int ascii);
+   Actor *chooseFromInventory(Actor *me);
 
 protected:
    bool moveOrAttack(Actor *me, int targetx, int targety);
+   void checkTile(Actor *actor);
 };
 
 class MonsterAI : public AI {
