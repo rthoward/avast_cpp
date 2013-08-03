@@ -74,15 +74,11 @@ Attacker* Actor::getAttacker() const {
 void Actor::setGlyph(int glyph)        { this->ch = glyph; }
 void Actor::setName(string name)       { this->name = name; }
 void Actor::setBlocks(bool blocks)     { this->blocks = blocks; }
-void Actor::setDestructible(Destructible *dest ) {
-   this->destructible = dest;
-}
-void Actor::setAttacker(Attacker *att) {
-   this->attacker = att;
-}
-void Actor::setAI(AI *ai) {
-   this->ai = ai;
-}
+void Actor::setDestructible(Destructible *dest )   { this->destructible = dest; }
+void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
+void Actor::setAI(AI *ai)                          { this->ai = ai; }
+void Actor::setContainer(Container *cont)          { this->container = cont; }
+void Actor::setPickable(Pickable *pick)            { this->pickable = pick; }
 
 bool Actor::isBlocking() const         { return blocks; }
 bool Actor::isDead() const             { return destructible->isDead(); }

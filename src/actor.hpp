@@ -36,6 +36,8 @@ public:
    void setDestructible(Destructible *dest);
    void setAttacker(Attacker *att);
    void setAI(AI *ai);
+   void setContainer(Container *cont);
+   void setPickable (Pickable *pick);
 
    // status
    bool isBlocking() const;
