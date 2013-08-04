@@ -1,4 +1,5 @@
 #include "libtcod.hpp"
+#include "destructible.hpp"
 #include "actor.hpp"
 #include "container.hpp"
 #include "engine.hpp"
@@ -19,5 +20,17 @@ bool Pickable::use(Actor *me, Actor *wearer) {
       return true;
    }
    
+   return false;
+}
+
+// item types -----------------------------------------------------------------
+
+Healer::Healer(float amount) : amount(amount) {}
+
+bool Healer::use(Actor *me, Actor *wearer) {
+   if (wearer->getDestructible()) {
+      float amtHealed = wearer->getDestructible()->heal(amount);
+      if (amtHealed > 0)      return Pickable::use(me, wearer);
+   }
    return false;
 }
