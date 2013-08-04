@@ -71,7 +71,7 @@ Pickable* Actor::getPickable() const               { return this->pickable; }
 
 void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
 void Actor::setName(string name)                   { this->name = name; }
-void Actor::setBlocks(bool blocks)                 { this->blocks = blocks; }
+void Actor::setBlockng(bool blocks)                { this->blocks = blocks; }
 void Actor::setDestructible(Destructible *dest )   { this->destructible = dest; }
 void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }

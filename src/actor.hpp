@@ -34,7 +34,7 @@ public:
    // mutators
    void setGlyph(int glyph);
    void setName(string name);
-   void setBlocks(bool blocks);
+   void setBlocking(bool blocks);
    void setDestructible(Destructible *dest);
    void setAttacker(Attacker *att);
    void setAI(AI *ai);
