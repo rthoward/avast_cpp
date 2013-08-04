@@ -22,6 +22,7 @@ public:
    void computeFov();
 
    void addMonster(int x, int y);
+   void addItem(int x, int y);
 
 protected:
 
