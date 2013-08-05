@@ -16,13 +16,17 @@ class Actor {
 public:
    Actor(int x, int y, int ch, string name, const TCODColor &col);
    ~Actor();
+
    void render() const;
    void update();
 
    // actions
-   bool moveOrAttack(int dx, int dy);
    void moveTo(int x, int y);
    bool tryPickUp(Actor *me, Actor *item);
+
+   // status
+   bool isBlocking() const;
+   bool isDead() const;
 
    // accessors
    int getX() const;
@@ -43,10 +47,6 @@ public:
    void setAI(AI *ai);
    void setContainer(Container *cont);
    void setPickable (Pickable *pick);
-
-   // status
-   bool isBlocking() const;
-   bool isDead() const;
 
 private:
 

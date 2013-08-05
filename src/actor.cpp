@@ -35,27 +35,6 @@ void Actor::update() {
       ai->update(this);
 }
 
-bool Actor::moveOrAttack(int dx, int dy) {
-
-   int newX = x + dx;
-   int newY = y + dy;
-   Actor *collider;
-
-   Map *map = engine.getMap();
-
-   if (engine.getMap()->isWall(newX, newY))
-      return false;
-
-   if ( (collider = map->getActorAt(newX, newY)) ){
-      return false;
-   }
-
-   this->x = newX;
-   this->y = newY;
-
-   return true;
-}
-
 void Actor::moveTo(int x, int y) {
    this->x = x;
    this->y = y;
@@ -68,12 +47,8 @@ bool Actor::tryPickUp(Actor *me, Actor *item) {
       return false;
 
    if (item->getPickable()->pick(me, item)) {
-      engine.getGUI()->message(TCODColor::lightGrey,
-            "You pick up the %s.", item->getName().c_str());
       return true;
    } else {
-      engine.getGUI()->message(TCODColor::red,
-            "Cannot pick up the %s: your inventory is full.", item->getName().c_str());
       return false;
    }
    
