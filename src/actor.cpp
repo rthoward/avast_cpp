@@ -41,12 +41,27 @@ void Actor::moveTo(int x, int y) {
 }
 
 bool Actor::tryPickUp(Actor *me, Actor *item) {
-   if (item == NULL)
+
+   string msg = "There is nothing here to pick up.";
+
+   if (item == NULL) {
+      engine.getGUI()->message(msg);
       return false;
-   if ( !(item->getType() == ITEM) )
+   }
+   else if ( !(item->getType() == ITEM) ) {
+      engine.getGUI()->message(msg);
       return false;
-   if (item->getPickable()->pick(me, item))
+   }
+   else if (item->getPickable()->pick(item, me)) {
+      msg = "You pick up the "; msg += item->getName() + ".";
+      engine.getGUI()->message(msg, TCODColor::lightGreen);
       return true;
+   }
+   else {
+      msg = "Your inventory is full";
+      engine.getGUI()->message(msg, TCODColor::lightRed);
+   }
+
    return false;
 }
 
