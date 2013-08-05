@@ -21,7 +21,8 @@ public:
       PLAYER,
       MONSTER,
       ITEM,
-      CORPSE
+      CORPSE,
+      UNKNOWN
    };
 
    void render() const;
@@ -34,7 +35,6 @@ public:
    // status
    bool isBlocking() const;
    bool isDead() const;
-   Type type() const;
 
    // accessors
    int getX() const;
@@ -45,6 +45,7 @@ public:
    Attacker* getAttacker() const;
    Container *getContainer() const;
    Pickable *getPickable() const;
+   Type getType() const;
 
    // mutators
    void setGlyph(int glyph);

@@ -43,20 +43,16 @@ void Actor::moveTo(int x, int y) {
 bool Actor::tryPickUp(Actor *me, Actor *item) {
    if (item == NULL)
       return false;
-   if (!item->getPickable())
+   if ( !(item->getType() == ITEM) )
       return false;
-
-   if (item->getPickable()->pick(me, item)) {
+   if (item->getPickable()->pick(me, item))
       return true;
-   } else {
-      return false;
-   }
-   
+   return false;
 }
 
 bool Actor::isBlocking() const         { return blocks; }
 bool Actor::isDead() const             { return destructible->isDead(); }
-enum Actor::Type Actor::type() const {
+enum Actor::Type Actor::getType() const {
    if (pickable)
       return ITEM;
    else if (this == engine.getPlayer())
@@ -65,6 +61,7 @@ enum Actor::Type Actor::type() const {
       if (isDead())  return CORPSE;
       else           return MONSTER; 
    }
+   return UNKNOWN;
 }
 
 int Actor::getX() const                            { return x; }
