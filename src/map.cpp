@@ -182,10 +182,13 @@ void Map::addMonster(int x, int y) {
       orc->setAttacker(new Attacker(3));
       orc->setAI(new MonsterAI());
       engine.addActor(orc);
+   } else {
+      Actor *troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
+      troll->setDestructible(new MonsterDestructible(15, 0, "dead troll"));
+      troll->setAttacker(new Attacker(5));
+      troll->setAI(new MonsterAI());
+      engine.addActor(troll);
    }
-   // } else {
-   //    engine.addActor(new Actor(x, y, 'T', "troll", TCODColor::darkerGreen));
-   // }
 }
 
 void Map::addItem(int x, int y) {
