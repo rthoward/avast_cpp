@@ -1,3 +1,6 @@
+#ifndef __CONTAINER_HPP__
+#define __CONTAINER_HPP__
+
 class Container {
 
 public:
@@ -13,3 +16,5 @@ private:
    int size;
    TCODList<Actor *> inventory;
 };
+
+#endif

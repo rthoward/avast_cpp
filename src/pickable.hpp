@@ -1,3 +1,6 @@
+#ifndef __PICKABLE_HPP__
+#define __PICKABLE_HPP__
+
 class Pickable {
 
 public:
@@ -16,3 +19,5 @@ public:
 private:
    float amount;
 };
+
+#endif
