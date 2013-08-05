@@ -163,8 +163,10 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
       while (numItems > 0) {
          int x = rng->getInt(x1, x2);
          int y = rng->getInt(y1, y2);
-         if (canWalk(x, y))
+         if (canWalk(x, y)) {
+            printf("adding item at (%d, %d)\n", x, y);
             addItem(x, y);
+         }
          numItems--;
       }
    }
@@ -206,4 +208,13 @@ Actor* Map::getActorAt(int x, int y) const {
    }
    
    return NULL;
+}
+
+Actor* Map::getItemAt(int x, int y) const {
+   Actor *actor = getActorAt(x, y);
+   if (actor == NULL)
+      return NULL;
+   if (!actor->getPickable())
+      return NULL;
+   return actor;
 }
