@@ -23,3 +23,7 @@ bool Container::add(Actor *actor) {
 void Container::remove(Actor *actor) {
    inventory.remove(actor);
 }
+
+TCODList<Actor *> Container::getInventory() {
+   return this->inventory;
+}

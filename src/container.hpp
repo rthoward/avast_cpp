@@ -7,6 +7,8 @@ public:
    bool add(Actor *actor);
    void remove(Actor *actor);
 
+   TCODList<Actor *> getInventory();
+
 private:
    int size;
    TCODList<Actor *> inventory;
