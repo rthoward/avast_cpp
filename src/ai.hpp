@@ -19,6 +19,7 @@ class PlayerAI : public AI {
 public:
    void update(Actor *me);
    void handleActionKey(Actor *me, int ascii);
+   Actor *chooseFromInventory(Actor *me);
 
 protected:
    bool moveOrAttack(Actor *me, int targetx, int targety);

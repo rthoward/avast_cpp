@@ -2,6 +2,8 @@
 #include "actor.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
+#include "pickable.hpp"
+#include "container.hpp"
 #include "engine.hpp"
 #include "gui.hpp"
 #include "map.hpp"
@@ -42,8 +44,16 @@ void PlayerAI::update(Actor *me) {
 void PlayerAI::handleActionKey(Actor *me, int ascii) {
 
    string invalid  = "Not a recognized action.";
+   Actor *item;
 
    switch (ascii) {
+      case 'i' :
+         item = chooseFromInventory(me);
+         if (item) {
+            item->getPickable()->use(item, me);
+            engine.setStatus(Engine::NEW_TURN);
+         }
+         break;
       case ',' : 
          me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
          break;
@@ -91,6 +101,43 @@ void PlayerAI::checkTile(Actor *actor) {
          break;
       default: break;
    }
+}
+
+Actor *PlayerAI::chooseFromInventory(Actor *me) {
+   static const int INV_WIDTH = 50;
+   static const int INV_HEIGHT = 28;
+   static TCODConsole con(INV_WIDTH, INV_HEIGHT);
+
+   con.setDefaultForeground(TCODColor(200, 180, 50));
+   con.printFrame(0, 0, INV_WIDTH, INV_HEIGHT, true, TCOD_BKGND_DEFAULT,
+         "inventory");
+   con.setDefaultForeground(TCODColor::white);
+   int shortcut = 'a';
+   int y = 1;
+
+   TCODList<Actor *> inventory = me->getContainer()->getInventory();
+   Actor *item;
+
+   for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
+      item = *iter;
+      con.print(2, y, "(%c) - %s", shortcut, item->getName().c_str());
+   }
+
+   TCODConsole::blit(&con, 0, 0, INV_WIDTH, INV_HEIGHT, TCODConsole::root,
+         engine.getScreenWidth() / 2 - INV_WIDTH / 2,
+         engine.getScreenHeight() / 2 - INV_HEIGHT / 2);
+   TCODConsole::flush();
+
+   TCOD_key_t key;
+   TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+
+   if (key.vk == TCODK_CHAR) {
+      int itemIndex = key.c - 'a';
+      if (itemIndex >= 0 && itemIndex < inventory.size())
+         return inventory.get(itemIndex);
+   }
+
+   return NULL;
 }
 
 // monster AI -----------------------------------------------------------------
