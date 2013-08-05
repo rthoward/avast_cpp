@@ -3,6 +3,7 @@
 #include "destructible.hpp"
 #include "attacker.hpp"
 #include "engine.hpp"
+#include "gui.hpp"
 #include "map.hpp"
 #include "ai.hpp"
 #include <iostream>
@@ -24,7 +25,8 @@ void PlayerAI::update(Actor *me) {
       case TCODK_DOWN   : dy += 1; break;
       case TCODK_LEFT   : dx -= 1; break;
       case TCODK_RIGHT  : dx += 1; break;
-      default: break;
+      case TCODK_CHAR   : handleActionKey(me, engine.getLastKey().c); break;
+      default           : break;
    }
 
    if ( (dx + dy) != 0) {
@@ -32,6 +34,15 @@ void PlayerAI::update(Actor *me) {
       if (moveOrAttack(me, me->getX() + dx, me->getY() + dy)) {
          engine.getMap()->computeFov();
       }
+   }
+}
+
+void PlayerAI::handleActionKey(Actor *me, int ascii) {
+   switch (ascii) {
+      case ',' : 
+         me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
+         break;
+      default  : break;
    }
 }
 
