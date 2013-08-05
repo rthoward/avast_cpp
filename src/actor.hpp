@@ -18,8 +18,11 @@ public:
    ~Actor();
    void render() const;
    void update();
+
+   // actions
    bool moveOrAttack(int dx, int dy);
    void moveTo(int x, int y);
+   bool tryPickUp(Actor *me, Actor *item);
 
    // accessors
    int getX() const;

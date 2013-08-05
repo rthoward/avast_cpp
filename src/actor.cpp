@@ -1,5 +1,6 @@
 #include "libtcod.hpp"
 #include "destructible.hpp"
+#include "gui.hpp"
 #include "attacker.hpp"
 #include "ai.hpp"
 #include "pickable.hpp"
@@ -60,6 +61,22 @@ void Actor::moveTo(int x, int y) {
    this->y = y;
 }
 
+bool Actor::tryPickUp(Actor *me, Actor *item) {
+   if (item == NULL)
+      return false;
+   if (!item->getPickable())
+      return false;
+
+   if (item->getPickable()->pick(me, item)) {
+      engine.getGUI()->message(TCODColor::lightGrey,
+            "You pick up the %s.", item->getName().c_str());
+      return true;
+   } else 
+      engine.getGUI()->message(TCODColor::red,
+            "Cannot pick up the %s: your inventory is full.", item->getName().c_str());
+   
+}
+
 int Actor::getX() const                            { return x; }
 int Actor::getY() const                            { return y; }
 int Actor::getID() const                           { return id; }
@@ -71,7 +88,7 @@ Pickable* Actor::getPickable() const               { return this->pickable; }
 
 void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
 void Actor::setName(string name)                   { this->name = name; }
-void Actor::setBlockng(bool blocks)                { this->blocks = blocks; }
+void Actor::setBlocking(bool blocks)               { this->blocks = blocks; }
 void Actor::setDestructible(Destructible *dest )   { this->destructible = dest; }
 void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }
