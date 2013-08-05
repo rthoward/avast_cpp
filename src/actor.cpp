@@ -54,6 +54,19 @@ bool Actor::tryPickUp(Actor *me, Actor *item) {
    
 }
 
+bool Actor::isBlocking() const         { return blocks; }
+bool Actor::isDead() const             { return destructible->isDead(); }
+enum Actor::Type Actor::type() const {
+   if (pickable)
+      return ITEM;
+   else if (this == engine.getPlayer())
+      return PLAYER;
+   else if (ai) {
+      if (isDead())  return CORPSE;
+      else           return MONSTER; 
+   }
+}
+
 int Actor::getX() const                            { return x; }
 int Actor::getY() const                            { return y; }
 int Actor::getID() const                           { return id; }
@@ -71,6 +84,3 @@ void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }
 void Actor::setContainer(Container *cont)          { this->container = cont; }
 void Actor::setPickable(Pickable *pick)            { this->pickable = pick; }
-
-bool Actor::isBlocking() const         { return blocks; }
-bool Actor::isDead() const             { return destructible->isDead(); }

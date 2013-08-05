@@ -17,6 +17,13 @@ public:
    Actor(int x, int y, int ch, string name, const TCODColor &col);
    ~Actor();
 
+   enum Type {
+      PLAYER,
+      MONSTER,
+      ITEM,
+      CORPSE
+   };
+
    void render() const;
    void update();
 
@@ -27,6 +34,7 @@ public:
    // status
    bool isBlocking() const;
    bool isDead() const;
+   Type type() const;
 
    // accessors
    int getX() const;
