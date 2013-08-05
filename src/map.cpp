@@ -192,7 +192,7 @@ void Map::addItem(int x, int y) {
    Actor *healthPotion = new Actor(x, y, '!', "potion of healing", TCODColor::violet);
    healthPotion->setBlocking(false);
    healthPotion->setPickable(new Healer(4));
-   engine.getActorList().push(healthPotion);
+   engine.addActor(healthPotion);
 }
 
 Actor* Map::getActorAt(int x, int y) const {
@@ -202,7 +202,7 @@ Actor* Map::getActorAt(int x, int y) const {
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
       if (actor == NULL)
-         printf("actor is null. this shouldn't be happening\n");
+         continue;
       else if (actor->getX() == x && actor->getY() == y)
          return actor;
    }
