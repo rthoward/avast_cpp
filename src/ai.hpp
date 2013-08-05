@@ -22,6 +22,7 @@ public:
 
 protected:
    bool moveOrAttack(Actor *me, int targetx, int targety);
+   void checkTile(Actor *actor);
 };
 
 class MonsterAI : public AI {

@@ -40,40 +40,60 @@ void PlayerAI::update(Actor *me) {
 }
 
 void PlayerAI::handleActionKey(Actor *me, int ascii) {
+
+   string invalid  = "Not a recognized action.";
+
    switch (ascii) {
       case ',' : 
          me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
          break;
-      default  : break;
+      default  : 
+         engine.getGUI()->message(invalid, TCODColor::lightRed);
+         break;
    }
 }
 
 bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
 
-   Map *map = engine.getMap();
-   Actor *actor = NULL;
-
    // stop player from running in to wall
    if (engine.getMap()->isWall(targetx, targety))
       return false;
 
-   // actor present
-   if ( (actor = map->getActorAt(targetx, targety)) ) {
-
-      // living actor present. attack!
-      if (actor->getDestructible() && !actor->getDestructible()->isDead()) {
-         me->getAttacker()->attack(me, actor);
-         return false;
-      }
-      // corpse present. notify player
-      else if (actor->getDestructible() && actor->getDestructible()->isDead()) {
-         cout << "There's a " << actor->getName() << " here\n";
-      }
+   Actor *actor = engine.getMap()->getActorAt(targetx, targety);
+   if (actor == NULL) {
+      me->moveTo(targetx, targety);
+      return true;
+   }
+   else if (actor->getType() == Actor::MONSTER) {
+      me->getAttacker()->attack(me, actor); 
+      return false;
+   } else {
+      checkTile(actor);
+      me->moveTo(targetx, targety);
+      return true;
    }
 
-   me->moveTo(targetx, targety);
-   return true;
+   return false;
 }
+
+void PlayerAI::checkTile(Actor *actor) {
+
+   string msg = "";
+
+   switch (actor->getType()) {
+      case Actor::ITEM:
+         msg = "You see here a "; msg += actor->getName() + ".";
+         engine.getGUI()->message(msg);
+         break;
+      case Actor::CORPSE:
+         msg = "There is a "; msg += actor->getName() + " here.";
+         engine.getGUI()->message(msg);
+         break;
+      default: break;
+   }
+}
+
+// monster AI -----------------------------------------------------------------
 
 MonsterAI::MonsterAI() : moveCount(3) {};
 
