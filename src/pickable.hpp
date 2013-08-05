@@ -1,6 +1,8 @@
 class Pickable {
 
 public:
+   virtual ~Pickable();
+
    bool pick(Actor *me, Actor *wearer);
    virtual bool use(Actor *me, Actor *wearer);
 };

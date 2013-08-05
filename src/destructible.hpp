@@ -10,6 +10,7 @@ class Destructible {
 public:
 
    Destructible(float hpMax, float def, string corpseName);
+   virtual ~Destructible();
 
    float takeDamage(Actor *me, float damage);
    float heal(float amount);

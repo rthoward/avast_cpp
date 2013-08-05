@@ -10,6 +10,8 @@ public:
 
    virtual void update(Actor *me)=0;
 
+   virtual ~AI();
+
 };
 
 class PlayerAI : public AI {

@@ -8,6 +8,8 @@ Destructible::Destructible(float hpMax, float def, string corpseName) :
     hpMax(hpMax),hp(hpMax),defense(def),corpseName(corpseName) {
 }
 
+Destructible::~Destructible() {};
+
 float Destructible::takeDamage(Actor *me, float damage) {
    
    // defense negates some damage

@@ -13,6 +13,8 @@ using namespace std;
 
 static const int MONS_TRACKING_TURNS = 3;
 
+AI::~AI() {};
+
 void PlayerAI::update(Actor *me) {
 
    if (me->getDestructible() && me->getDestructible()->isDead())

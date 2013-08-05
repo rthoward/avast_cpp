@@ -71,9 +71,11 @@ bool Actor::tryPickUp(Actor *me, Actor *item) {
       engine.getGUI()->message(TCODColor::lightGrey,
             "You pick up the %s.", item->getName().c_str());
       return true;
-   } else 
+   } else {
       engine.getGUI()->message(TCODColor::red,
             "Cannot pick up the %s: your inventory is full.", item->getName().c_str());
+      return false;
+   }
    
 }
 
