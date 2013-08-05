@@ -25,7 +25,7 @@ Engine::Engine(int screenWidth, int screenHeight) {
    map = new Map(80, 43);
    gui = new GUI();
 
-   gui->message(TCODColor::lightGrey, "Welcome to the dungeons of danger!");
+   gui->message("Welcome to the dungeons of danger!");
 }
 
 Engine::~Engine() {
