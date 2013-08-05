@@ -203,7 +203,8 @@ Actor* Map::getActorAt(int x, int y) const {
       Actor *actor = *iter;
       if (actor == NULL)
          continue;
-      else if (actor->getX() == x && actor->getY() == y)
+      else if (actor != engine.getPlayer() && 
+            actor->getX() == x && actor->getY() == y)
          return actor;
    }
    
