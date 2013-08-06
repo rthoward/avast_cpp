@@ -3,7 +3,7 @@
 #include "map.hpp"
 #include "engine.hpp"
 
-Engine engine(80, 50);
+Engine engine(100, 60);
 
 int main() {
 
