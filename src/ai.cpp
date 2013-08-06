@@ -56,6 +56,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case 'u'    : dx += 1; dy -= 1; break;
       case 'b'    : dx -= 1; dy += 1; break;
       case 'n'    : dx += 1; dy += 1; break;
+      case 'q'    : engine.setStatus(Engine::QUIT); break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {

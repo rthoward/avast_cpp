@@ -52,6 +52,8 @@ void Engine::update() {
          if (actor != player)
             actor->update();
       }
+   } else if (gameStatus == QUIT) {
+
    }
 }
 

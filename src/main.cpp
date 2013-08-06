@@ -7,7 +7,7 @@ Engine engine(100, 60);
 
 int main() {
 
-   while (!TCODConsole::isWindowClosed()) {
+   while (!TCODConsole::isWindowClosed() && engine.getStatus() != Engine::QUIT) {
       engine.update();
       engine.render();
       TCODConsole::flush();
