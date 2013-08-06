@@ -43,10 +43,19 @@ void PlayerAI::update(Actor *me) {
 
 void PlayerAI::handleActionKey(Actor *me, int ascii) {
 
+   int dx = 0, dy = 0;
    string invalid  = "Not a recognized action.";
    Actor *item;
 
    switch (ascii) {
+      case 'h'    : dx -= 1; break;
+      case 'j'    : dy += 1; break;
+      case 'k'    : dy -= 1; break;
+      case 'l'    : dx += 1; break;
+      case 'y'    : dx -= 1; dy -= 1; break;
+      case 'u'    : dx += 1; dy -= 1; break;
+      case 'b'    : dx -= 1; dy += 1; break;
+      case 'n'    : dx += 1; dy += 1; break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -60,6 +69,13 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       default  :
          engine.getGUI()->message(invalid, TCODColor::lightRed);
          break;
+   }
+
+   if ( dx != 0 || dy != 0) {
+      engine.setStatus(Engine::NEW_TURN);
+      if (moveOrAttack(me, me->getX() + dx, me->getY() + dy)) {
+         engine.getMap()->computeFov();
+      }
    }
 }
 
