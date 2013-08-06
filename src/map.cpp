@@ -164,7 +164,6 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
          int x = rng->getInt(x1, x2);
          int y = rng->getInt(y1, y2);
          if (canWalk(x, y)) {
-            printf("adding item at (%d, %d)\n", x, y);
             addItem(x, y);
          }
          numItems--;
@@ -206,11 +205,11 @@ Actor* Map::getActorAt(int x, int y) const {
       Actor *actor = *iter;
       if (actor == NULL)
          continue;
-      else if (actor != engine.getPlayer() && 
+      else if (actor != engine.getPlayer() &&
             actor->getX() == x && actor->getY() == y)
          return actor;
    }
-   
+
    return NULL;
 }
 
