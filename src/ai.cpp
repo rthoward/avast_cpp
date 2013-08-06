@@ -54,10 +54,10 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
             engine.setStatus(Engine::NEW_TURN);
          }
          break;
-      case ',' : 
+      case ',' :
          me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
          break;
-      default  : 
+      default  :
          engine.getGUI()->message(invalid, TCODColor::lightRed);
          break;
    }
@@ -75,7 +75,7 @@ bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
       return true;
    }
    else if (actor->getType() == Actor::MONSTER) {
-      me->getAttacker()->attack(me, actor); 
+      me->getAttacker()->attack(me, actor);
       return false;
    } else {
       checkTile(actor);
@@ -121,6 +121,8 @@ Actor *PlayerAI::chooseFromInventory(Actor *me) {
    for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
       item = *iter;
       con.print(2, y, "(%c) - %s", shortcut, item->getName().c_str());
+      y++;
+      shortcut++;
    }
 
    TCODConsole::blit(&con, 0, 0, INV_WIDTH, INV_HEIGHT, TCODConsole::root,
@@ -152,7 +154,7 @@ void MonsterAI::update(Actor *me) {
    if (engine.getMap()->isInFov(me->getX(), me->getY())) {
       moveCount = MONS_TRACKING_TURNS;
    } else {
-      moveCount--; 
+      moveCount--;
    }
 
    if (moveCount > 0) {
