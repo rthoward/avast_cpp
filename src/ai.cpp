@@ -17,6 +17,10 @@ static const int MONS_TRACKING_TURNS = 3;
 
 AI::~AI() {};
 
+PlayerAI::PlayerAI() {
+   aiState = NORMAL;
+}
+
 void PlayerAI::update(Actor *me) {
 
    if (me->getDestructible() && me->getDestructible()->isDead())
