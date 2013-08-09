@@ -20,7 +20,8 @@ Engine::Engine(int screenWidth, int screenHeight) {
    TCODConsole::setCustomFont("dejavu12x12_gs_tc.png", TCOD_FONT_LAYOUT_TCOD | TCOD_FONT_TYPE_GREYSCALE);
    TCODConsole::initRoot(screenWidth, screenHeight, "cpp roguelike", false);
    std::string playerName = "Player";
-   addActor(factory.generate(40, 25, ActorFactory::PLAYER, playerName));
+   player = factory.generate(40, 25, ActorFactory::PLAYER, playerName);
+   addActor(player);
    map = new Map(80, 43);
    gui = new GUI();
    gui->message("Welcome to the dungeons of danger!");
