@@ -1,6 +1,8 @@
 #ifndef __MAP_HPP__
 #define __MAP_HPP__
 
+class ActorFactory;
+
 struct Tile {
    bool explored;
    Tile() : explored(false) {}
@@ -31,6 +33,7 @@ protected:
    int width, height;
    Tile *tiles;
    TCODMap *map;
+   ActorFactory *actorFactory;
    friend class BspListener;
 
    void dig(int x1, int y1, int x2, int y2);
