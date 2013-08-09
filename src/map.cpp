@@ -1,4 +1,5 @@
 #include "libtcod.hpp"
+#include "actor_factory.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
 #include "ai.hpp"
@@ -51,6 +52,7 @@ Map::Map(int width, int height) : width(width), height(height) {
    tiles = new Tile[width * height];
    map = new TCODMap(width, height);
    TCODBsp bsp(0, 0, width, height);
+   actorFactory = new ActorFactory;
    bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
    BspListener listener(*this);
    bsp.traverseInvertedLevelOrder(&listener, NULL);
@@ -59,6 +61,7 @@ Map::Map(int width, int height) : width(width), height(height) {
 Map::~Map() {
    delete [] tiles;
    delete map;
+   delete actorFactory;
 }
 
 bool Map::isWall(int x, int y) const {
@@ -176,17 +179,9 @@ void Map::addMonster(int x, int y) {
    TCODRandom *rng = TCODRandom::getInstance();
 
    if (rng->getInt(0, 100) < 80) {
-      Actor *orc = new Actor(x, y, 'o', "orc", TCODColor::desaturatedGreen);
-      orc->setDestructible(new MonsterDestructible(10, 0, "dead orc"));
-      orc->setAttacker(new Attacker(3));
-      orc->setAI(new MonsterAI());
-      engine.addActor(orc);
+      engine.addActor(actorFactory->generate(x, y, ActorFactory::M_ORC));
    } else {
-      Actor *troll = new Actor(x, y, 'T', "troll", TCODColor::darkerGreen);
-      troll->setDestructible(new MonsterDestructible(15, 0, "dead troll"));
-      troll->setAttacker(new Attacker(5));
-      troll->setAI(new MonsterAI());
-      engine.addActor(troll);
+      engine.addActor(actorFactory->generate(x, y, ActorFactory::M_TROLL));
    }
 }
 
@@ -209,7 +204,6 @@ Actor* Map::getActorAt(int x, int y) const {
             actor->getX() == x && actor->getY() == y)
          return actor;
    }
-
    return NULL;
 }
 
