@@ -65,8 +65,13 @@ bool Actor::tryPickUp(Actor *me, Actor *item) {
    return false;
 }
 
-bool Actor::isBlocking() const         { return blocks; }
-bool Actor::isDead() const             { return destructible->isDead(); }
+bool Actor::isBlocking() const         { return blocks && !isDead(); }
+bool Actor::isDead() const {
+   if (destructible)
+      return destructible->isDead();
+   else
+      return false;
+}
 enum Actor::Type Actor::getType() const {
    if (pickable)
       return ITEM;
