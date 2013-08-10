@@ -12,8 +12,7 @@
 Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
    fovRadius = 10;
-   computeFov = true;
-   this->screenWidth = screenWidth;
+   computeFov = true; this->screenWidth = screenWidth;
    this->screenHeight = screenHeight;
    TCODConsole::setCustomFont("dejavu12x12_gs_tc.png", TCOD_FONT_LAYOUT_TCOD | TCOD_FONT_TYPE_GREYSCALE);
    TCODConsole::initRoot(screenWidth, screenHeight, "cpp roguelike", false);
@@ -24,7 +23,8 @@ Engine::Engine(int screenWidth, int screenHeight) {
    player->setAI(new PlayerAI());
    player->setContainer(new Container(26));
    actors.push(player);
-   map = new Map(80, 43);
+   maxDLevel = currentDLevel = 1;
+   maps.push(new Map(80, 43));
    gui = new GUI();
 
    gui->message("Welcome to the dungeons of danger!");
@@ -32,13 +32,13 @@ Engine::Engine(int screenWidth, int screenHeight) {
 
 Engine::~Engine() {
    actors.clearAndDelete();
-   delete map;
+   maps.clearAndDelete();
    delete gui;
 }
 
 void Engine::update() {
    if (gameStatus == STARTUP)
-      map->computeFov();
+      getMap()->computeFov();
 
    gameStatus = IDLE;
    TCODSystem::checkForEvent(TCOD_EVENT_KEY_PRESS, &lastKey, NULL);
@@ -60,7 +60,7 @@ void Engine::update() {
 void Engine::render() {
    TCODConsole::root->clear();
 
-   map->render();
+   getMap()->render();
    TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d",
          (int)player->getDestructible()->getHP(), 
          (int)player->getDestructible()->getHPMax());
@@ -68,7 +68,7 @@ void Engine::render() {
    // render actors
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor != player && map->isInFov(actor->getX(), actor->getY()))
+      if (actor != player && getMap()->isInFov(actor->getX(), actor->getY()))
             actor->render();
    }
 
@@ -98,7 +98,7 @@ Actor* Engine::getPlayer() {
 }
 
 Map* Engine::getMap() {
-   return map;
+   return maps.get(currentDLevel - 1);
 }
 
 Engine::GameStatus Engine::getStatus() {
@@ -111,9 +111,30 @@ TCOD_key_t Engine::getLastKey() {
 
 int Engine::getScreenWidth() const     { return screenWidth; }
 int Engine::getScreenHeight() const    { return screenHeight; }
-
-GUI *Engine::getGUI()           { return this->gui; }
+GUI *Engine::getGUI()                  { return this->gui; }
+int Engine::getCurrentDLevel() const   { return this->currentDLevel; }
 
 void Engine::setStatus(enum GameStatus status) {
    gameStatus = status;
+}
+
+bool Engine::upLevel() {
+   if (currentDLevel <= 1)
+      return false;
+   else {
+      currentDLevel--;
+      return true;
+   }
+}
+
+bool Engine::downLevel() {
+   if (currentDLevel < maxDLevel) {
+      currentDLevel++;
+      return true;
+   } else {
+      // generate new map
+      currentDLevel = ++maxDLevel;
+      maps.push(new Map(80, 43));
+      return true;
+   }
 }

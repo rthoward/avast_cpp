@@ -10,10 +10,12 @@ class Engine {
 
 private:
    TCODList<Actor *> actors;
+   TCODList<Map *> maps;
    Actor *player;
-   Map *map;
    GUI *gui;
    bool computeFov;
+   int currentDLevel;
+   int maxDLevel;
 
    int screenWidth, screenHeight;
    TCOD_key_t lastKey;
@@ -38,6 +40,9 @@ public:
    void removeActor(Actor *actor);
    void sendToFront(Actor *actor);
 
+   bool upLevel();
+   bool downLevel();
+
    TCODList<Actor *> getActorList();
    Actor* getPlayer();
    Map* getMap();
@@ -46,6 +51,7 @@ public:
    int getScreenWidth() const;
    int getScreenHeight() const;
    GUI *getGUI();
+   int getCurrentDLevel() const;
 
    void setStatus(enum GameStatus status);
 
