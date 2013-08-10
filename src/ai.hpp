@@ -28,11 +28,15 @@ public:
       AUTORUN_RIGHT,
       AUTORUN_UP,
       AUTORUN_DOWN
-   } aiState;
+   };
 
 protected:
+   AIState aiState;
+
    bool moveOrAttack(Actor *me, int targetx, int targety);
    void checkTile(Actor *actor);
+   AIState chooseAutorun();
+   bool shouldStop(Actor *me);
 };
 
 class MonsterAI : public AI {

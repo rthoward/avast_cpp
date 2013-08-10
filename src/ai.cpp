@@ -26,6 +26,16 @@ void PlayerAI::update(Actor *me) {
    if (me->getDestructible() && me->getDestructible()->isDead())
       return;
 
+   if (aiState != NORMAL) {
+      switch (aiState) {
+         case AUTORUN_LEFT    : handleActionKey(me, 'h'); break;
+         case AUTORUN_DOWN    : handleActionKey(me, 'j'); break;
+         case AUTORUN_UP      : handleActionKey(me, 'k'); break;
+         case AUTORUN_RIGHT   : handleActionKey(me, 'l'); break;
+         default              : break;
+      }
+   }
+
    int dx = 0, dy = 0;
 
    switch(engine.getLastKey().vk) {
@@ -42,6 +52,12 @@ void PlayerAI::update(Actor *me) {
       if (moveOrAttack(me, me->getX() + dx, me->getY() + dy)) {
          engine.getMap()->computeFov();
       }
+   }
+   
+   if (aiState != NORMAL && shouldStop(me)) {
+      aiState = NORMAL;
+      string msg = "You stop moving.";
+      engine.getGUI()->message(msg);
    }
 }
 
@@ -61,6 +77,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case 'b'    : dx -= 1; dy += 1; break;
       case 'n'    : dx += 1; dy += 1; break;
       case 'q'    : engine.setStatus(Engine::QUIT); break;
+      case 'g'    : aiState = chooseAutorun(); break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -161,6 +178,60 @@ Actor *PlayerAI::chooseFromInventory(Actor *me) {
    }
 
    return NULL;
+}
+
+PlayerAI::AIState PlayerAI::chooseAutorun() {
+   string msg = "Which direction do you want to run to?"; 
+   engine.getGUI()->message(msg);
+
+   TCOD_key_t key;
+   TCODSystem::waitForEvent(TCOD_EVENT_KEY_PRESS, &key, NULL, true);
+
+   if (key.vk == TCODK_CHAR) {
+      int dir = key.c;
+      switch (dir) {
+         case 'h' : return AUTORUN_LEFT; break;
+         case 'j' : return AUTORUN_DOWN; break;
+         case 'k' : return AUTORUN_UP; break;
+         case 'l' : return AUTORUN_RIGHT; break;
+         default  : 
+            string msg = "Not a valid direction";
+            engine.getGUI()->message(msg);
+            return NORMAL;
+            break;
+      }
+      
+   } else {
+      string msg = "Not a valid direction";
+      return NORMAL;
+   }
+}
+
+bool PlayerAI::shouldStop(Actor *me) {
+   TCODList<Actor *> actors = engine.getActorList();
+
+   // check if any potential attackers entered FOV
+   for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
+      Actor *actor = *iter;
+      if (actor == NULL)                     continue;
+      if (actor == me)                       continue;
+      if ( !(actor->getAttacker()) )         continue;
+      if (actor->isDead())                   continue;
+      if (engine.getMap()->isInFov(actor->getX(), actor->getY()))
+         return true;
+   }
+
+   int x = me->getX(), y = me->getY();
+   Map *map = engine.getMap();
+
+   // check if next tile is obstructed
+   switch (aiState) {
+      case AUTORUN_LEFT    : return !(map->canWalk(x - 1, y)); break;
+      case AUTORUN_RIGHT   : return !(map->canWalk(x + 1, y)); break;
+      case AUTORUN_UP      : return !(map->canWalk(x, y - 1)); break;
+      case AUTORUN_DOWN    : return !(map->canWalk(x, y + 1)); break;
+      default              : return false;
+   }
 }
 
 // monster AI -----------------------------------------------------------------
