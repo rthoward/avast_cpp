@@ -7,23 +7,22 @@
 #include "engine.hpp"
 #include "map.hpp"
 #include "gui.hpp"
+#include "actor_factory.hpp"
 #include <string>
 
 Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
    fovRadius = 10;
-   computeFov = true; this->screenWidth = screenWidth;
+   computeFov = true;
+   ActorFactory factory;
+   this->screenWidth = screenWidth;
    this->screenHeight = screenHeight;
    TCODConsole::setCustomFont("dejavu12x12_gs_tc.png", TCOD_FONT_LAYOUT_TCOD | TCOD_FONT_TYPE_GREYSCALE);
    TCODConsole::initRoot(screenWidth, screenHeight, "cpp roguelike", false);
    std::string playerName = "Player";
-   player = new Actor(40, 25, '@', playerName, TCODColor::white);
-   player->setDestructible(new PlayerDestructible(30, 2, "your cadaver"));
-   player->setAttacker(new Attacker(5));
-   player->setAI(new PlayerAI());
-   player->setContainer(new Container(26));
-   actors.push(player);
    maxDLevel = currentDLevel = 1;
+   player = factory.generate(40, 25, ActorFactory::PLAYER, playerName);
+   addActor(player);
    maps.push(new Map(80, 43));
    gui = new GUI();
 
