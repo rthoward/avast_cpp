@@ -194,10 +194,8 @@ void Map::addItem(int x, int y) {
 }
 
 void Map::addStaircases() {
-   ActorFactory *factory = new ActorFactory; 
-
-   Actor *upStaircase = factory->generate(0, 0, ActorFactory::F_STAIRS_UP);
-   Actor *downStaircase = factory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
+   Actor *upStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_UP);
+   Actor *downStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
    moveActorRandom(downStaircase);
