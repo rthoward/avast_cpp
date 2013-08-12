@@ -14,8 +14,8 @@ int Actor::ACTOR_ID = 0;
 
 Actor::Actor(int x, int y, int ch, string name, const TCODColor &col) :
    x(x), y(y), ch(ch), name(name), color(col), id(ACTOR_ID++),
-   blocks(true), attacker(NULL), destructible(NULL), ai(NULL),
-   pickable(NULL), container(NULL) {}
+   blocks(true), fovOnly(false), attacker(NULL), destructible(NULL), ai(NULL), 
+   pickable(NULL), container(NULL) {};
 
 Actor::~Actor() {
    if (attacker)     delete attacker;
@@ -87,11 +87,13 @@ enum Actor::Type Actor::getType() const {
 int Actor::getX() const                            { return x; }
 int Actor::getY() const                            { return y; }
 int Actor::getID() const                           { return id; }
+int Actor::getChar() const                         { return this->ch; }
 string Actor::getName() const                      { return name; }
 Destructible* Actor::getDestructible() const       { return this->destructible; }
 Attacker* Actor::getAttacker() const               { return this->attacker; }
 Container* Actor::getContainer() const             { return this->container; }
 Pickable* Actor::getPickable() const               { return this->pickable; }
+bool Actor::getFovOnly() const                     { return this->fovOnly; }
 
 void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
 void Actor::setName(string name)                   { this->name = name; }
@@ -101,3 +103,4 @@ void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }
 void Actor::setContainer(Container *cont)          { this->container = cont; }
 void Actor::setPickable(Pickable *pick)            { this->pickable = pick; }
+void Actor::setFovOnly(bool fovOnly)               { this->fovOnly = fovOnly; }

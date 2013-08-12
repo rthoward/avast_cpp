@@ -19,6 +19,9 @@ public:
       M_TROLL,
 
       P_HEALING,
+
+      F_STAIRS_UP,
+      F_STAIRS_DOWN
    };
 
    Actor *generate(int x, int y, ActorType type, std::string name = "");

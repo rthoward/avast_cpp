@@ -78,6 +78,9 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case 'n'    : dx += 1; dy += 1; break;
       case 'q'    : engine.setStatus(Engine::QUIT); break;
       case 'g'    : aiState = chooseAutorun(); break;
+      case '<'    : tryStaircase(me, true); break;
+      case '>'    : tryStaircase(me, false); break;
+      case 'H'    : me->getDestructible()->heal(10); break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -231,6 +234,19 @@ bool PlayerAI::shouldStop(Actor *me) {
       case AUTORUN_UP      : return !(map->canWalk(x, y - 1)); break;
       case AUTORUN_DOWN    : return !(map->canWalk(x, y + 1)); break;
       default              : return false;
+   }
+}
+
+void PlayerAI::tryStaircase(Actor *me, bool up) {
+   Actor *standing = engine.getMap()->getActorAt(me->getX(), me->getY());
+
+   if (up && standing->getChar() == '<') {
+      engine.upLevel();
+      engine.getMap()->computeFov();
+   }
+   else if (!up && standing->getChar() == '>') {
+      engine.downLevel();
+      engine.getMap()->computeFov();
    }
 }
 

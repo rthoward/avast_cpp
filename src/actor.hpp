@@ -22,6 +22,8 @@ public:
       MONSTER,
       ITEM,
       CORPSE,
+      STAIRS_UP,
+      STAIRS_DOWN,
       UNKNOWN
    };
 
@@ -46,6 +48,8 @@ public:
    Container *getContainer() const;
    Pickable *getPickable() const;
    Type getType() const;
+   bool getFovOnly() const;
+   int getChar() const;
 
    // mutators
    void setGlyph(int glyph);
@@ -56,6 +60,7 @@ public:
    void setAI(AI *ai);
    void setContainer(Container *cont);
    void setPickable (Pickable *pick);
+   void setFovOnly(bool fovOnly);
 
 private:
 
@@ -67,6 +72,7 @@ private:
    static int ACTOR_ID;
    const int id;
    bool blocks;
+   bool fovOnly;
 
    // compositional behavior objects
    Attacker *attacker;

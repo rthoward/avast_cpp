@@ -56,6 +56,7 @@ Map::Map(int width, int height) : width(width), height(height) {
    bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
    BspListener listener(*this);
    bsp.traverseInvertedLevelOrder(&listener, NULL);
+   addStaircases();
 }
 
 Map::~Map() {
@@ -190,6 +191,33 @@ void Map::addItem(int x, int y) {
    healthPotion->setBlocking(false);
    healthPotion->setPickable(new Healer(4));
    engine.addActor(healthPotion);
+}
+
+void Map::addStaircases() {
+   ActorFactory *factory = new ActorFactory; 
+
+   Actor *upStaircase = factory->generate(0, 0, ActorFactory::F_STAIRS_UP);
+   Actor *downStaircase = factory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
+ 
+   upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
+   moveActorRandom(downStaircase);
+   engine.addActor(upStaircase);
+   engine.addActor(downStaircase);
+}
+
+void Map::moveActorRandom(Actor *actor) {
+   int randX, randY;
+   bool added = false;
+   TCODRandom *rng = TCODRandom::getInstance();
+
+   while (!added) {
+      randX = rng->getInt(0, width);
+      randY = rng->getInt(0, height);
+      if (canWalk(randX, randY)) {
+         actor->moveTo(randX, randY);
+         added = true;
+      }
+   }
 }
 
 Actor* Map::getActorAt(int x, int y) const {

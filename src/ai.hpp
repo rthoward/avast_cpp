@@ -37,6 +37,7 @@ protected:
    void checkTile(Actor *actor);
    AIState chooseAutorun();
    bool shouldStop(Actor *me);
+   void tryStaircase(Actor *me, bool up);
 };
 
 class MonsterAI : public AI {

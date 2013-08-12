@@ -27,6 +27,8 @@ public:
 
    void addMonster(int x, int y);
    void addItem(int x, int y);
+   void moveActorRandom(Actor *actor);
+   void addStaircases();
 
 protected:
 

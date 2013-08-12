@@ -51,19 +51,31 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
          destructible = new MonsterDestructible(15, 0, "dead troll");
          attacker = new Attacker(5);
          break;
+      case ActorFactory::F_STAIRS_UP:
+         myName = "up stairs";
+         ch = '<';
+         color = TCODColor::white;
+         break;
+      case ActorFactory::F_STAIRS_DOWN:
+         myName = "down stairs";
+         ch = '>';
+         color = TCODColor::white;
       default:
          break;
    }
 
-   if (!(ai))
-      return NULL;
-
    actor = new Actor(x, y, ch, myName, color);
-   actor->setAI(ai);
-   actor->setDestructible(destructible);
-   actor->setAttacker(attacker);
-   actor->setContainer(container);
-   actor->setPickable(pickable);
+
+   if (ai)
+      actor->setAI(ai);
+   if (destructible)
+      actor->setDestructible(destructible);
+   if (attacker)
+      actor->setAttacker(attacker);
+   if (container)
+      actor->setContainer(container);
+   if (pickable)
+      actor->setPickable(pickable);
 
    return actor;
 }

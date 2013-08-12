@@ -60,15 +60,19 @@ void Engine::render() {
    TCODConsole::root->clear();
 
    getMap()->render();
-   TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d",
+   TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d | DLVL %d",
          (int)player->getDestructible()->getHP(), 
-         (int)player->getDestructible()->getHPMax());
+         (int)player->getDestructible()->getHPMax(),
+         currentDLevel);
 
    // render actors
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
       if (actor != player && getMap()->isInFov(actor->getX(), actor->getY()))
-            actor->render();
+         actor->render();
+      else if (!actor->getFovOnly() && 
+            getMap()->isExplored(actor->getX(), actor->getY()))
+         actor->render();
    }
 
    player->render();
