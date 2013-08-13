@@ -38,7 +38,7 @@ void Destructible::die(Actor *me) {
    // turn actor into corpse
    me->setGlyph('%');
    me->setName(corpseName);
-   engine.sendToFront(me);
+   engine.sendToBack(me);
 }
 
 MonsterDestructible::MonsterDestructible(float maxHp, float defense, const char *corpseName) :

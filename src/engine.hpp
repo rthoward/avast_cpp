@@ -20,6 +20,9 @@ private:
    int screenWidth, screenHeight;
    TCOD_key_t lastKey;
 
+   bool shouldRender(Actor *actor);
+   bool shouldUpdate(Actor *actor);
+
 public:
 
    enum GameStatus {
@@ -39,6 +42,7 @@ public:
    void addActor(Actor *actor);
    void removeActor(Actor *actor);
    void sendToFront(Actor *actor);
+   void sendToBack(Actor *actor);
 
    bool upLevel();
    bool downLevel();
@@ -52,6 +56,8 @@ public:
    int getScreenHeight() const;
    GUI *getGUI();
    int getCurrentDLevel() const;
+   Actor *getDownStaircase() const;
+   Actor *getUpStaircase() const;
 
    void setStatus(enum GameStatus status);
 
