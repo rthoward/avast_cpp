@@ -50,6 +50,7 @@ public:
    Type getType() const;
    bool getFovOnly() const;
    int getChar() const;
+   int getFloor() const;
 
    // mutators
    void setGlyph(int glyph);
@@ -61,6 +62,7 @@ public:
    void setContainer(Container *cont);
    void setPickable (Pickable *pick);
    void setFovOnly(bool fovOnly);
+   void setFloor(int floor);
 
 private:
 
@@ -73,6 +75,7 @@ private:
    const int id;
    bool blocks;
    bool fovOnly;
+   int floor;
 
    // compositional behavior objects
    Attacker *attacker;

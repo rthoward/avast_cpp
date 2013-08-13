@@ -94,6 +94,7 @@ Attacker* Actor::getAttacker() const               { return this->attacker; }
 Container* Actor::getContainer() const             { return this->container; }
 Pickable* Actor::getPickable() const               { return this->pickable; }
 bool Actor::getFovOnly() const                     { return this->fovOnly; }
+int Actor::getFloor() const                        { return this->floor; }
 
 void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
 void Actor::setName(string name)                   { this->name = name; }
@@ -104,3 +105,4 @@ void Actor::setAI(AI *ai)                          { this->ai = ai; }
 void Actor::setContainer(Container *cont)          { this->container = cont; }
 void Actor::setPickable(Pickable *pick)            { this->pickable = pick; }
 void Actor::setFovOnly(bool fovOnly)               { this->fovOnly = fovOnly; }
+void Actor::setFloor(int floor)                    { this->floor = floor; }
