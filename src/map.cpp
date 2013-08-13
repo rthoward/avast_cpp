@@ -178,24 +178,33 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 
 void Map::addMonster(int x, int y) {
    TCODRandom *rng = TCODRandom::getInstance();
+   Actor *monster;
 
    if (rng->getInt(0, 100) < 80) {
-      engine.addActor(actorFactory->generate(x, y, ActorFactory::M_ORC));
+      monster = actorFactory->generate(x, y, ActorFactory::M_ORC);
    } else {
-      engine.addActor(actorFactory->generate(x, y, ActorFactory::M_TROLL));
+      monster = actorFactory->generate(x, y, ActorFactory::M_TROLL);
    }
+
+   monster->setFloor(engine.getCurrentDLevel());
+   engine.addActor(monster);
 }
 
 void Map::addItem(int x, int y) {
    Actor *healthPotion = new Actor(x, y, '!', "potion of healing", TCODColor::violet);
+   healthPotion->setFloor(engine.getCurrentDLevel());
    healthPotion->setBlocking(false);
    healthPotion->setPickable(new Healer(4));
    engine.addActor(healthPotion);
 }
 
 void Map::addStaircases() {
+   int currentFloor = engine.getCurrentDLevel();
+
    Actor *upStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_UP);
    Actor *downStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
+   upStaircase->setFloor(currentFloor);
+   downStaircase->setFloor(currentFloor);
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
    moveActorRandom(downStaircase);
@@ -224,7 +233,7 @@ Actor* Map::getActorAt(int x, int y) const {
 
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor == NULL)
+      if (actor == NULL || actor->getFloor() != engine.getCurrentDLevel())
          continue;
       else if (actor != engine.getPlayer() &&
             actor->getX() == x && actor->getY() == y)

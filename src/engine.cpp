@@ -48,7 +48,7 @@ void Engine::update() {
       for (Actor **iterator = actors.begin();
            iterator != actors.end(); iterator++) {
          Actor *actor = *iterator;
-         if (actor != player)
+         if (shouldUpdate(actor))
             actor->update();
       }
    } else if (gameStatus == QUIT) {
@@ -68,10 +68,7 @@ void Engine::render() {
    // render actors
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor != player && getMap()->isInFov(actor->getX(), actor->getY()))
-         actor->render();
-      else if (!actor->getFovOnly() && 
-            getMap()->isExplored(actor->getX(), actor->getY()))
+      if (shouldRender(actor))
          actor->render();
    }
 
@@ -126,6 +123,8 @@ bool Engine::upLevel() {
       return false;
    else {
       currentDLevel--;
+      Actor *stairs = getDownStaircase();
+      player->moveTo(stairs->getX(), stairs->getY());
       return true;
    }
 }
@@ -133,6 +132,8 @@ bool Engine::upLevel() {
 bool Engine::downLevel() {
    if (currentDLevel < maxDLevel) {
       currentDLevel++;
+      Actor *stairs = getUpStaircase();
+      player->moveTo(stairs->getX(), stairs->getY());
       return true;
    } else {
       // generate new map
@@ -140,4 +141,47 @@ bool Engine::downLevel() {
       maps.push(new Map(80, 43));
       return true;
    }
+}
+
+bool Engine::shouldRender(Actor *actor) {
+
+   if (actor->getFloor() != currentDLevel)
+      return false;
+   else if (actor == player)
+      return false;
+
+   int x, y;
+   x = actor->getX();
+   y = actor->getY();
+
+   if (!actor->getFovOnly() && getMap()->isExplored(x, y))
+      return true;
+   else if (getMap()->isInFov(x, y))
+      return true;
+
+   return false;
+}
+
+bool Engine::shouldUpdate(Actor *actor) {
+   return (actor->getFloor() == getCurrentDLevel() && actor != player);
+}
+
+Actor *Engine::getDownStaircase() const {
+   for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
+      Actor *actor = *iter;
+      if (actor->getChar() == '>')
+         return actor;
+   }
+
+   return NULL;
+}
+
+Actor *Engine::getUpStaircase() const {
+   for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
+      Actor *actor = *iter;
+      if (actor->getChar() == '<')
+         return actor;
+   }
+
+   return NULL;
 }
