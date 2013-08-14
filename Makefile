@@ -1,7 +1,7 @@
 SOURCES = $(wildcard src/*.cpp)
 OBJS = $(SOURCES:.cpp=.o)
 LIBFLAGS = -Iinclude -L. -ltcod_debug -ltcodxx_debug -Wl,-rpath=.
-CC = clang++
+CC = clang++ -std=c++11 -stdlib=libstdc++
 CFLAGS = -Wall -g
 
 tuto: $(OBJS)
