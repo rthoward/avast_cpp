@@ -43,6 +43,8 @@ void GUI::render() {
       if (colorCoef < 1.0f)      colorCoef += 0.3f;
    }
 
+   debug(1, 3, BAR_WIDTH);
+
    TCODConsole::blit(con, 0, 0, engine.getScreenWidth(), PANEL_HEIGHT,
          TCODConsole::root, 0, engine.getScreenHeight() - PANEL_HEIGHT);
 
@@ -77,6 +79,11 @@ void GUI::message(string text, const TCODColor &col) {
 
    Message *msg = new Message(text, col);
    log.push(msg);
+}
+
+void GUI::debug(int x, int y, int width) const {
+   con->printEx(x + width / 2, y, TCOD_BKGND_NONE, TCOD_CENTER,
+         "actors: %d", engine.getActorList().size());
 }
 
 GUI::Message::Message(string text, const TCODColor &col) :
