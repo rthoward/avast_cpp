@@ -15,9 +15,8 @@ Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
    fovRadius = 10;
    computeFov = true;
-   playerStat = new PlayerStat();
    turn = 1;
-   telepathy = false;
+   playerStat = new PlayerStat();
    ActorFactory factory;
    this->screenWidth = screenWidth;
    this->screenHeight = screenHeight;
@@ -50,6 +49,7 @@ void Engine::update() {
    // update all non-player actors
    if (gameStatus == NEW_TURN) {
       turn++;
+      playerStat->update();
 
       for (Actor **iterator = actors.begin();
            iterator != actors.end(); iterator++) {
@@ -58,7 +58,7 @@ void Engine::update() {
             actor->update();
       }
    } else if (gameStatus == QUIT) {
-
+      gui->message("See you next time.", TCODColor::white);
    }
 }
 
@@ -121,6 +121,10 @@ TCOD_key_t Engine::getLastKey() {
    return this->lastKey;
 }
 
+PlayerStat *Engine::getPlayerStat() const {
+   return this->playerStat;
+}
+
 int Engine::getScreenWidth() const     { return screenWidth; }
 int Engine::getScreenHeight() const    { return screenHeight; }
 GUI *Engine::getGUI()                  { return this->gui; }
@@ -167,7 +171,7 @@ bool Engine::shouldRender(Actor *actor) {
    x = actor->getX();
    y = actor->getY();
 
-   if (telepathy)
+   if (playerStat->isTelepathic())
       return true;
 
    if (!actor->getFovOnly() && getMap()->isExplored(x, y))
@@ -200,8 +204,4 @@ Actor *Engine::getUpStaircase() const {
    }
 
    return NULL;
-}
-
-void Engine::toggleTelepathy() {
-   telepathy = !telepathy;
 }

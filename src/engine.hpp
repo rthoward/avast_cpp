@@ -61,10 +61,10 @@ public:
    int getCurrentDLevel() const;
    Actor *getDownStaircase() const;
    Actor *getUpStaircase() const;
+   PlayerStat *getPlayerStat() const;
    int getTurn() const;
 
    void setStatus(enum GameStatus status);
-   void toggleTelepathy();
 
    int fovRadius;
 };

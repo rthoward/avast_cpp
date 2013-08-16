@@ -6,6 +6,7 @@
 #include "container.hpp"
 #include "engine.hpp"
 #include "gui.hpp"
+#include "player_stat.hpp"
 #include "map.hpp"
 #include "ai.hpp"
 #include <iostream>
@@ -87,7 +88,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case '>'    : tryStaircase(me, false); break;
       case 'H'    : me->getDestructible()->heal(10); break;
       case '.'    : wait = true; break;
-      case 'T'    : engine.toggleTelepathy(); break;
+      case 'T'    : engine.getPlayerStat()->setTelepathic(20); break;
       case ':'    : 
          checkTile(engine.getMap()->getActorAt(me->getX(), me->getY()));
          break;
