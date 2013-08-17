@@ -64,6 +64,7 @@ void PlayerAI::update(Actor *me) {
 void PlayerAI::handleActionKey(Actor *me, int ascii) {
 
    int dx = 0, dy = 0;
+   bool wait = false;
    string invalid  = "Not a recognized action.";
    Actor *item;
 
@@ -81,6 +82,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case '<'    : tryStaircase(me, true); break;
       case '>'    : tryStaircase(me, false); break;
       case 'H'    : me->getDestructible()->heal(10); break;
+      case '.'    : wait = true; break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -96,7 +98,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
          break;
    }
 
-   if ( dx != 0 || dy != 0) {
+   if ( dx != 0 || dy != 0 || wait) {
       engine.setStatus(Engine::NEW_TURN);
       if (moveOrAttack(me, me->getX() + dx, me->getY() + dy)) {
          engine.getMap()->computeFov();
