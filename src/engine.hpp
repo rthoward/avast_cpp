@@ -16,6 +16,7 @@ private:
    bool computeFov;
    int currentDLevel;
    int maxDLevel;
+   int turn;
 
    int screenWidth, screenHeight;
    TCOD_key_t lastKey;
@@ -58,6 +59,7 @@ public:
    int getCurrentDLevel() const;
    Actor *getDownStaircase() const;
    Actor *getUpStaircase() const;
+   int getTurn() const;
 
    void setStatus(enum GameStatus status);
 

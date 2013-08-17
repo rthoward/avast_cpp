@@ -82,8 +82,11 @@ void GUI::message(string text, const TCODColor &col) {
 }
 
 void GUI::debug(int x, int y, int width) const {
+   con->setDefaultForeground(TCODColor::white);
    con->printEx(x + width / 2, y, TCOD_BKGND_NONE, TCOD_CENTER,
          "actors: %d", engine.getActorList().size());
+   con->printEx(x + width / 2, y + 1, TCOD_BKGND_NONE, TCOD_CENTER,
+         "turn: %d", engine.getTurn());
 }
 
 GUI::Message::Message(string text, const TCODColor &col) :

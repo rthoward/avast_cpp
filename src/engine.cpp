@@ -14,6 +14,7 @@ Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
    fovRadius = 10;
    computeFov = true;
+   turn = 1;
    ActorFactory factory;
    this->screenWidth = screenWidth;
    this->screenHeight = screenHeight;
@@ -45,6 +46,8 @@ void Engine::update() {
 
    // update all non-player actors
    if (gameStatus == NEW_TURN) {
+      turn++;
+
       for (Actor **iterator = actors.begin();
            iterator != actors.end(); iterator++) {
          Actor *actor = *iterator;
@@ -118,6 +121,7 @@ int Engine::getScreenWidth() const     { return screenWidth; }
 int Engine::getScreenHeight() const    { return screenHeight; }
 GUI *Engine::getGUI()                  { return this->gui; }
 int Engine::getCurrentDLevel() const   { return this->currentDLevel; }
+int Engine::getTurn() const            { return this->turn; }
 
 void Engine::setStatus(enum GameStatus status) {
    gameStatus = status;
