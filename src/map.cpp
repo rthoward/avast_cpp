@@ -66,6 +66,7 @@ Map::~Map() {
 }
 
 bool Map::isWall(int x, int y) const {
+   if (!inMap(x, y))    return true;
    return !map->isWalkable(x, y);
 }
 
@@ -74,6 +75,7 @@ bool Map::isExplored(int x, int y) const {
 }
 
 bool Map::isInFov(int x, int y) const {
+   if (!inMap(x, y))    return false;
    if (map->isInFov(x, y)) {
       tiles[x + y * width].explored = true;
       return true;
@@ -250,4 +252,8 @@ Actor* Map::getItemAt(int x, int y) const {
    if (!actor->getPickable())
       return NULL;
    return actor;
+}
+
+bool Map::inMap(int x, int y) const {
+   return ( (x < width) && (y < height) );
 }
