@@ -264,13 +264,14 @@ void MonsterAI::update(Actor *me) {
    // if player is in fov, move toward him / her
    if (engine.getMap()->isInFov(me->getX(), me->getY())) {
       moveCount = MONS_TRACKING_TURNS;
-   } else {
-      moveCount--;
    }
-
-   if (moveCount > 0) {
+   
+   if (moveCount > 0){
+      moveCount--;
       Actor *player = engine.getPlayer();
       moveOrAttack(me, player->getX(), player->getY());
+   } else {
+      moveRandom(me);
    }
 }
 
@@ -298,4 +299,20 @@ void MonsterAI::moveOrAttack(Actor *me, int targetx, int targety) {
       me->getAttacker()->attack(me, engine.getPlayer());
    }
 
+}
+
+void MonsterAI::moveRandom(Actor *me) {
+   int dx = 0, dy = 0;
+   int try_count = 4;
+   TCODRandom *rng = TCODRandom::getInstance();
+   Map *map = engine.getMap();
+   
+   do {
+      dx = rng->getInt(-1, 1);
+      dy = rng->getInt(-1, 1);
+      try_count--;
+   } while (!map->canWalk(me->getX() + dx, me->getY() + dy) && try_count > 0);
+
+   if (try_count > 0)
+      me->moveTo(me->getX() + dx, me->getY() + dy);
 }

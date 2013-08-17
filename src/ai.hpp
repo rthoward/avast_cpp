@@ -48,6 +48,7 @@ public:
 
 protected:
    void moveOrAttack(Actor *me, int targetx, int targety);
+   void moveRandom(Actor *me);
    int moveCount;
 };
 
