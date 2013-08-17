@@ -17,6 +17,7 @@ private:
    int currentDLevel;
    int maxDLevel;
    int turn;
+   bool telepathy;
 
    int screenWidth, screenHeight;
    TCOD_key_t lastKey;
@@ -62,6 +63,7 @@ public:
    int getTurn() const;
 
    void setStatus(enum GameStatus status);
+   void toggleTelepathy();
 
    int fovRadius;
 };

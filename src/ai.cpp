@@ -83,6 +83,7 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case '>'    : tryStaircase(me, false); break;
       case 'H'    : me->getDestructible()->heal(10); break;
       case '.'    : wait = true; break;
+      case 'T'    : engine.toggleTelepathy(); break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -254,7 +255,7 @@ void PlayerAI::tryStaircase(Actor *me, bool up) {
 
 // monster AI -----------------------------------------------------------------
 
-MonsterAI::MonsterAI() : moveCount(3) {};
+MonsterAI::MonsterAI() : moveCount(0) {};
 
 void MonsterAI::update(Actor *me) {
    if (me->getDestructible() && me->getDestructible()->isDead())

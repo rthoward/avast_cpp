@@ -15,6 +15,7 @@ Engine::Engine(int screenWidth, int screenHeight) {
    fovRadius = 10;
    computeFov = true;
    turn = 1;
+   telepathy = false;
    ActorFactory factory;
    this->screenWidth = screenWidth;
    this->screenHeight = screenHeight;
@@ -163,6 +164,9 @@ bool Engine::shouldRender(Actor *actor) {
    x = actor->getX();
    y = actor->getY();
 
+   if (telepathy)
+      return true;
+
    if (!actor->getFovOnly() && getMap()->isExplored(x, y))
       return true;
    else if (getMap()->isInFov(x, y))
@@ -193,4 +197,8 @@ Actor *Engine::getUpStaircase() const {
    }
 
    return NULL;
+}
+
+void Engine::toggleTelepathy() {
+   telepathy = !telepathy;
 }
