@@ -47,6 +47,11 @@ void PlayerAttacker::attack(Actor *attacker, Actor *target) {
       }
    }
    engine.getGUI()->message(attack_msg.str(), TCODColor::white);
+
+   // did we kill it?
+   if (target->isDead()) {
+      attacker->addExp(target->getDestructible()->getExp());
+   }
 }
 
 float Attacker::getPower() const    { return this->power; }

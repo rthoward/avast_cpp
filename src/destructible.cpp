@@ -4,8 +4,8 @@
 #include <iostream>
 using namespace std;
 
-Destructible::Destructible(float hpMax, float def, string corpseName) :
-    hpMax(hpMax),hp(hpMax),defense(def),corpseName(corpseName) {
+Destructible::Destructible(float hpMax, float def, string corpseName, int exp) :
+    hpMax(hpMax),hp(hpMax),defense(def),corpseName(corpseName),exp(exp) {
 }
 
 Destructible::~Destructible() {};
@@ -62,3 +62,4 @@ void PlayerDestructible::die(Actor *me) {
 float Destructible::getHP()         { return hp; }
 float Destructible::getHPMax()      { return hpMax; }
 float Destructible::getDefense()    { return defense; }
+int Destructible::getExp()          { return exp; }

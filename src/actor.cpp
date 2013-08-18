@@ -14,7 +14,7 @@ int Actor::ACTOR_ID = 0;
 
 Actor::Actor(int x, int y, int ch, string name, const TCODColor &col) :
    x(x), y(y), ch(ch), name(name), color(col), id(ACTOR_ID++),
-   blocks(true), fovOnly(false), floor(0),
+   blocks(true), fovOnly(false), floor(0), exp(0), expLevel(1),
    attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL) {};
 
 Actor::~Actor() {
@@ -81,6 +81,14 @@ enum Actor::Type Actor::getType() const {
       else           return MONSTER; 
    }
    return UNKNOWN;
+}
+
+void Actor::addExp(int exp) {
+   this->exp += exp;
+
+   while (exp >= expLevel * 1.2) {
+      expLevel++;
+   }
 }
 
 int Actor::getX() const                            { return x; }

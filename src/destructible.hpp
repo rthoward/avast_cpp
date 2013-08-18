@@ -9,7 +9,7 @@ class Destructible {
    
 public:
 
-   Destructible(float hpMax, float def, string corpseName);
+   Destructible(float hpMax, float def, string corpsename, int exp = 5);
    virtual ~Destructible();
 
    float takeDamage(Actor *me, float damage);
@@ -20,12 +20,14 @@ public:
    float getHP();
    float getHPMax();
    float getDefense();
+   int getExp();
 
 private:
    float hpMax;
    float hp;
    float defense;
    string corpseName;
+   int exp;
 };
 
 class MonsterDestructible : public Destructible {

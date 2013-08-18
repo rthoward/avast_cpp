@@ -63,6 +63,7 @@ public:
    void setPickable (Pickable *pick);
    void setFovOnly(bool fovOnly);
    void setFloor(int floor);
+   void addExp(int exp);
 
 private:
 
@@ -76,6 +77,8 @@ private:
    bool blocks;
    bool fovOnly;
    int floor;
+   int exp;
+   int expLevel;
 
    // compositional behavior objects
    Attacker *attacker;
