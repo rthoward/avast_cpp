@@ -13,6 +13,37 @@ ActorFactory::ActorFactory() {
 
 }
 
+Actor *ActorFactory::genPlayer(int x, int y, string name) {
+   Actor *actor;
+   int ch = '@';
+   TCODColor color = TCODColor::white;
+   AI *ai = NULL;
+   Destructible *destructible = NULL;
+   PlayerAttacker *attacker = NULL;
+   Pickable *pickable = NULL;
+   Container *container = NULL;
+
+   ai = new PlayerAI(); 
+   destructible = new Destructible(30, 2, "your cadaver");
+   attacker = new PlayerAttacker(5);
+   container = new Container(26);
+
+   actor = new Actor(x, y, ch, name, color);
+
+   if (ai)
+      actor->setAI(ai);
+   if (destructible)
+      actor->setDestructible(destructible);
+   if (attacker)
+      actor->setAttacker(attacker);
+   if (container)
+      actor->setContainer(container);
+   if (pickable)
+      actor->setPickable(pickable);
+
+   return actor;
+}
+
 Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type, 
       string name) {
 
@@ -29,11 +60,6 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
 
    switch (type) {
       case ActorFactory::PLAYER: 
-         myName = name;
-         ai = new PlayerAI(); 
-         destructible = new Destructible(30, 2, "your cadaver");
-         attacker = new Attacker(5);
-         container = new Container(26);
          break;
       case ActorFactory::M_ORC: 
          myName = "orc";

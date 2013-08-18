@@ -5,6 +5,7 @@
 class Actor;
 
 #include <string>
+using namespace std;
 
 class ActorFactory {
 
@@ -24,7 +25,8 @@ public:
       F_STAIRS_DOWN
    };
 
-   Actor *generate(int x, int y, ActorType type, std::string name = "");
+   Actor *genPlayer(int x, int y, string name);
+   Actor *generate(int x, int y, ActorType type, string name = "");
 
 };
 

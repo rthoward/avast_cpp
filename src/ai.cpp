@@ -47,7 +47,7 @@ void PlayerAI::update(Actor *me) {
       default           : break;
    }
 
-   if ( (dx + dy) != 0) {
+   if ( (dx != 0) || (dy != 0) ) {
       engine.setStatus(Engine::NEW_TURN);
       if (moveOrAttack(me, me->getX() + dx, me->getY() + dy)) {
          engine.getMap()->computeFov();

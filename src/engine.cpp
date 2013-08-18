@@ -23,7 +23,7 @@ Engine::Engine(int screenWidth, int screenHeight) {
    TCODConsole::initRoot(screenWidth, screenHeight, "cpp roguelike", false);
    std::string playerName = "Player";
    maxDLevel = currentDLevel = 1;
-   player = factory.generate(40, 25, ActorFactory::PLAYER, playerName);
+   player = factory.genPlayer(40, 25, playerName);
    addActor(player);
    maps.push(new Map(80, 43));
    gui = new GUI();
