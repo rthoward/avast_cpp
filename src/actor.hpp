@@ -10,6 +10,8 @@ class Destructible;
 class AI;
 class Pickable;
 class Container;
+class Equippable;
+class Equipment;
 
 class Actor {
 
@@ -33,6 +35,7 @@ public:
    // actions
    void moveTo(int x, int y);
    bool tryPickUp(Actor *me, Actor *item);
+   bool tryEquip(Actor *me, Actor *item);
 
    // status
    bool isBlocking() const;
@@ -47,6 +50,8 @@ public:
    Attacker* getAttacker() const;
    Container *getContainer() const;
    Pickable *getPickable() const;
+   Equippable *getEquippable() const;
+   Equipment *getEquipment() const;
    Type getType() const;
    bool getFovOnly() const;
    int getChar() const;
@@ -61,6 +66,8 @@ public:
    void setAI(AI *ai);
    void setContainer(Container *cont);
    void setPickable (Pickable *pick);
+   void setEquippable(Equippable *equip);
+   void setEquipment(Equipment *equipment);
    void setFovOnly(bool fovOnly);
    void setFloor(int floor);
    void addExp(int exp);
@@ -86,6 +93,8 @@ private:
    AI *ai;
    Pickable *pickable;
    Container *container;
+   Equippable *equippable;
+   Equipment *equipment;
 };
 
 #endif

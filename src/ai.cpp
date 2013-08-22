@@ -91,6 +91,13 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
             engine.setStatus(Engine::NEW_TURN);
          }
          break;
+      case 'E' :
+         item = chooseFromInventory(me);
+         if (item) {
+            me->tryEquip(me, item);
+            engine.setStatus(Engine::NEW_TURN);
+         }
+         break;
       case ',' :
          me->tryPickUp(me, engine.getMap()->getItemAt(me->getX(), me->getY()));
          break;

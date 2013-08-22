@@ -22,11 +22,14 @@ public:
       P_HEALING,
 
       F_STAIRS_UP,
-      F_STAIRS_DOWN
+      F_STAIRS_DOWN,
+
+      W_STEEL_LONGSWORD,
    };
 
    Actor *genPlayer(int x, int y, string name);
    Actor *generate(int x, int y, ActorType type, string name = "");
+   Actor *genWeapon(int x, int y, ActorType type, string name = "");
 
 };
 

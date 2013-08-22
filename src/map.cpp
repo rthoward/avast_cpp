@@ -188,7 +188,6 @@ void Map::addMonster(int x, int y) {
       monster = actorFactory->generate(x, y, ActorFactory::M_TROLL);
    }
 
-   monster->setFloor(engine.getCurrentDLevel());
    engine.addActor(monster);
 }
 
@@ -209,9 +208,12 @@ void Map::addStaircases() {
    downStaircase->setFloor(currentFloor);
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
+   Actor *sword = actorFactory->genWeapon(upStaircase->getX() - 1, upStaircase->getY(), 
+         ActorFactory::W_STEEL_LONGSWORD);
    moveActorRandom(downStaircase);
    engine.addActor(upStaircase);
    engine.addActor(downStaircase);
+   engine.addActor(sword);
 }
 
 void Map::moveActorRandom(Actor *actor) {

@@ -5,6 +5,8 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "pickable.hpp"
+#include "equippable.hpp"
+#include "equipment.hpp"
 #include "actor_factory.hpp"
 #include <string>
 using namespace std;
@@ -27,6 +29,7 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
    destructible = new Destructible(30, 2, "your cadaver");
    attacker = new PlayerAttacker(5);
    container = new Container(26);
+   Equipment *equipment = new Equipment();
 
    actor = new Actor(x, y, ch, name, color);
 
@@ -40,6 +43,8 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
       actor->setContainer(container);
    if (pickable)
       actor->setPickable(pickable);
+   if (equipment)
+      actor->setEquipment(equipment);
 
    return actor;
 }
@@ -102,6 +107,35 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
       actor->setContainer(container);
    if (pickable)
       actor->setPickable(pickable);
+
+   return actor;
+}
+
+Actor *ActorFactory::genWeapon(int x, int y, ActorType type, string name) {
+
+   string myName = "";
+   Actor *actor;
+   int ch = ')';
+   TCODColor color = TCODColor::white;
+   Equippable *equippable;
+
+   switch (type) {
+      case ActorFactory::W_STEEL_LONGSWORD:
+         myName = "steel longsword";
+         equippable = new Equippable(3, 0);
+         color = TCODColor::lightBlue;
+         break;
+      default:
+         myName = "steel longsword";
+         equippable = new Equippable(3, 0);
+         color = TCODColor::lightBlue;
+         break;
+   }
+
+   actor = new Actor(x, y, ch, myName, color);
+   actor->setPickable(new Pickable);
+   equippable->setType(Equippable::WEAPON);
+   actor->setEquippable(equippable);
 
    return actor;
 }

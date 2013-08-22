@@ -81,6 +81,7 @@ void Engine::render() {
 }
 
 void Engine::addActor(Actor *actor) {
+   actor->setFloor(getCurrentDLevel());
    this->actors.push(actor);
 }
 
