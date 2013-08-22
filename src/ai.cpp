@@ -84,6 +84,9 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
       case 'H'    : me->getDestructible()->heal(10); break;
       case '.'    : wait = true; break;
       case 'T'    : engine.toggleTelepathy(); break;
+      case ':'    : 
+         checkTile(engine.getMap()->getActorAt(me->getX(), me->getY()));
+         break;
       case 'i' :
          item = chooseFromInventory(me);
          if (item) {
@@ -141,17 +144,26 @@ void PlayerAI::checkTile(Actor *actor) {
 
    string msg = "";
 
-   switch (actor->getType()) {
-      case Actor::ITEM:
-         msg = "You see here a "; msg += actor->getName() + ".";
-         engine.getGUI()->message(msg);
-         break;
-      case Actor::CORPSE:
-         msg = "There is a "; msg += actor->getName() + " here.";
-         engine.getGUI()->message(msg);
-         break;
-      default: break;
+   if (actor) {
+      switch (actor->getType()) {
+         case Actor::ITEM:
+            msg = "You see here a "; msg += actor->getName() + ".";
+            break;
+         case Actor::CORPSE:
+            msg = "There is a "; msg += actor->getName() + " here.";
+            break;
+         case NULL:
+            msg = "You see nothing here.";
+         default: 
+            msg = "You see a ";
+            msg += actor->getName() + ".";
+            break;
+      }
+   } else {
+      msg = "You see nothing here.";
    }
+
+   engine.getGUI()->message(msg);
 }
 
 Actor *PlayerAI::chooseFromInventory(Actor *me) {
