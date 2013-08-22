@@ -86,7 +86,7 @@ enum Actor::Type Actor::getType() const {
 void Actor::addExp(int exp) {
    this->exp += exp;
 
-   while (exp >= expLevel * 1.2) {
+   while (this->exp >= expLevel * 12) {
       expLevel++;
    }
 }
