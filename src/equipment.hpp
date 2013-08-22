@@ -12,6 +12,8 @@ public:
    bool equip(Actor *me, Actor *equipment);
    bool remove(Actor *me, Actor *equipment);
 
+   float getWeaponStr() const;
+
 private:
    Actor *head;
    Actor *body;

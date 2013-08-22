@@ -29,3 +29,7 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
 
    return false;
 }
+
+float Equipment::getWeaponStr() const {
+   return this->weapon->getEquippable()->getPower();
+}
