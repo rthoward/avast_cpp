@@ -12,6 +12,7 @@ class Pickable;
 class Container;
 class Equippable;
 class Equipment;
+class Stats;
 
 class Actor {
 
@@ -50,6 +51,7 @@ public:
    Attacker* getAttacker() const;
    Container *getContainer() const;
    Pickable *getPickable() const;
+   Stats *getStats() const;
    Equippable *getEquippable() const;
    Equipment *getEquipment() const;
    Type getType() const;
@@ -66,6 +68,7 @@ public:
    void setAI(AI *ai);
    void setContainer(Container *cont);
    void setPickable (Pickable *pick);
+   void setStats(Stats *stats);
    void setEquippable(Equippable *equip);
    void setEquipment(Equipment *equipment);
    void setFovOnly(bool fovOnly);
@@ -93,6 +96,7 @@ private:
    AI *ai;
    Pickable *pickable;
    Container *container;
+   Stats *stats;
    Equippable *equippable;
    Equipment *equipment;
 };

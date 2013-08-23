@@ -5,6 +5,7 @@
 #include "container.hpp"
 #include "destructible.hpp"
 #include "pickable.hpp"
+#include "stats.hpp"
 #include "equippable.hpp"
 #include "equipment.hpp"
 #include "actor_factory.hpp"
@@ -24,11 +25,13 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
    PlayerAttacker *attacker = NULL;
    Pickable *pickable = NULL;
    Container *container = NULL;
+   Stats *stats = NULL;
 
    ai = new PlayerAI(); 
-   destructible = new Destructible(30, 2, "your cadaver");
+   destructible = new Destructible(30, "your cadaver");
    attacker = new PlayerAttacker(5);
    container = new Container(26);
+   stats = new Stats(5, 2, 1);
    Equipment *equipment = new Equipment();
 
    actor = new Actor(x, y, ch, name, color);
@@ -43,6 +46,8 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
       actor->setContainer(container);
    if (pickable)
       actor->setPickable(pickable);
+   if (stats)
+      actor->setStats(stats);
    if (equipment)
       actor->setEquipment(equipment);
 
@@ -61,7 +66,8 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
    Destructible *destructible = NULL;
    Attacker *attacker = NULL;
    Pickable *pickable = NULL;
-   Container *container = NULL;
+   Stats *stats = NULL;
+   Container *container = NULL;   
 
    switch (type) {
       case ActorFactory::PLAYER: 
@@ -71,7 +77,7 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
          ch = 'o';
          color = TCODColor::desaturatedGreen;
          ai = new MonsterAI();
-         destructible = new MonsterDestructible(10, 0, "dead orc");
+         destructible = new MonsterDestructible(10, "dead orc");
          attacker = new Attacker(3);
          break;
       case ActorFactory::M_TROLL:
@@ -79,7 +85,7 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
          ch = 'T';
          color = TCODColor::lightYellow;
          ai = new MonsterAI();
-         destructible = new MonsterDestructible(15, 0, "dead troll");
+         destructible = new MonsterDestructible(15, "dead troll");
          attacker = new Attacker(5);
          break;
       case ActorFactory::F_STAIRS_UP:
@@ -107,6 +113,8 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
       actor->setContainer(container);
    if (pickable)
       actor->setPickable(pickable);
+   if (stats)
+      actor->setStats(stats);
 
    return actor;
 }

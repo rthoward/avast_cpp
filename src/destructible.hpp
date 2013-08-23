@@ -9,7 +9,7 @@ class Destructible {
    
 public:
 
-   Destructible(float hpMax, float def, string corpsename, int exp = 5);
+   Destructible(float hpMax, string corpsename, int exp = 5);
    virtual ~Destructible();
 
    float takeDamage(Actor *me, float damage);
@@ -18,27 +18,25 @@ public:
 
    inline bool isDead() { return hp <= 0; }
    float getHP();
-   float getHPMax();
-   float getDefense();
+   float getHPMax();   
    int getExp();
 
 private:
    float hpMax;
-   float hp;
-   float defense;
+   float hp;   
    string corpseName;
    int exp;
 };
 
 class MonsterDestructible : public Destructible {
 public :
-	MonsterDestructible(float maxHp, float defense, const char *corpseName);
+	MonsterDestructible(float maxHp, const char *corpseName);
 	void die(Actor *owner);
 };
 
 class PlayerDestructible : public Destructible {
 public :
-	PlayerDestructible(float maxHp, float defense, const char *corpseName);
+	PlayerDestructible(float maxHp, const char *corpseName);
 	void die(Actor *owner);
 };
 

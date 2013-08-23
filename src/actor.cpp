@@ -18,7 +18,7 @@ Actor::Actor(int x, int y, int ch, string name, const TCODColor &col) :
    x(x), y(y), ch(ch), name(name), color(col), id(ACTOR_ID++),
    blocks(true), fovOnly(false), floor(0), exp(0), expLevel(1),
    attacker(NULL), destructible(NULL), ai(NULL), pickable(NULL), container(NULL),
-   equippable(NULL), equipment(NULL) {};
+   stats(NULL), equippable(NULL), equipment(NULL) {};
 
 Actor::~Actor() {
    if (destructible) delete destructible;
@@ -123,6 +123,7 @@ Destructible* Actor::getDestructible() const       { return this->destructible; 
 Attacker* Actor::getAttacker() const               { return this->attacker; }
 Container* Actor::getContainer() const             { return this->container; }
 Pickable* Actor::getPickable() const               { return this->pickable; }
+Stats* Actor::getStats() const                     { return this->stats; }
 Equippable* Actor::getEquippable() const           { return this->equippable; }
 Equipment* Actor::getEquipment() const             { return this->equipment; }
 bool Actor::getFovOnly() const                     { return this->fovOnly; }
@@ -136,6 +137,7 @@ void Actor::setAttacker(Attacker *att)             { this->attacker = att; }
 void Actor::setAI(AI *ai)                          { this->ai = ai; }
 void Actor::setContainer(Container *cont)          { this->container = cont; }
 void Actor::setPickable(Pickable *pick)            { this->pickable = pick; }
+void Actor::setStats(Stats *stats)                 { this->stats = stats; }
 void Actor::setEquippable(Equippable *equip)       { this->equippable = equip; }
 void Actor::setEquipment(Equipment *equipment)     { this->equipment = equipment; }
 void Actor::setFovOnly(bool fovOnly)               { this->fovOnly = fovOnly; }

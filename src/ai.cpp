@@ -13,7 +13,7 @@
 #include <math.h>
 using namespace std;
 
-static inline float round(float val) {
+static inline double round(double val) {
 	return floor(val + 0.5);
 }
 
