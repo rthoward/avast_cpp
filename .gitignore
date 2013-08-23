@@ -1,3 +1,8 @@
 *.o
 *.so
 tuto
+*.vcxproj
+*.vcxproj.filters
+*.swp
+Debug/
+lib/
