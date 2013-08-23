@@ -124,7 +124,7 @@ Attacker* Actor::getAttacker() const               { return this->attacker; }
 Container* Actor::getContainer() const             { return this->container; }
 Pickable* Actor::getPickable() const               { return this->pickable; }
 Equippable* Actor::getEquippable() const           { return this->equippable; }
-Equipment* Actor::getEquipment() const            { return this->equipment; }
+Equipment* Actor::getEquipment() const             { return this->equipment; }
 bool Actor::getFovOnly() const                     { return this->fovOnly; }
 int Actor::getFloor() const                        { return this->floor; }
 

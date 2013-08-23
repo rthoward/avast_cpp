@@ -31,5 +31,8 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
 }
 
 float Equipment::getWeaponStr() const {
-   return this->weapon->getEquippable()->getPower();
+   if (weapon)
+      return weapon->getEquippable()->getPower();
+   else
+      return 0;
 }

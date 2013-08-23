@@ -17,7 +17,7 @@ private:
 
 class PlayerAttacker : public Attacker {
 public:
-   PlayerAttacker(float power) : Attacker::Attacker(power) {};
+   PlayerAttacker(float power) : Attacker(power) {};
    void attack(Actor *attacker, Actor *target);
 };
 
