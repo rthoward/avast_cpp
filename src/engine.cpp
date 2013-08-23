@@ -183,7 +183,7 @@ bool Engine::shouldUpdate(Actor *actor) {
 Actor *Engine::getDownStaircase() const {
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor->getChar() == '>')
+      if (actor->getChar() == '>' && actor->getFloor() == currentDLevel)
          return actor;
    }
 
@@ -193,7 +193,7 @@ Actor *Engine::getDownStaircase() const {
 Actor *Engine::getUpStaircase() const {
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
-      if (actor->getChar() == '<')
+      if (actor->getChar() == '<' && actor->getFloor() == currentDLevel)
          return actor;
    }
 
