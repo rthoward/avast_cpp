@@ -13,6 +13,10 @@
 #include <math.h>
 using namespace std;
 
+static inline float round(float val) {
+	return floor(val + 0.5);
+}
+
 static const int MONS_TRACKING_TURNS = 3;
 
 AI::~AI() {};
