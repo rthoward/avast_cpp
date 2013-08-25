@@ -111,10 +111,11 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
    return actor;
 }
 
-Actor *ActorFactory::genWeapon(int x, int y, ActorType type, string name) {
+Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
 
    string myName = "";
    Actor *actor;
+   string name = "";
    int ch = ')';
    TCODColor color = TCODColor::white;
    Equippable *equippable;
@@ -140,9 +141,10 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type, string name) {
    return actor;
 }
 
-Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type, string name = "") {
+Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type) {
    Actor *actor = NULL;
    int ch = ' ';
+   string name = "";
    TCODColor color = TCODColor::white;
    Pickable *pickable = NULL;
 
@@ -159,4 +161,6 @@ Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type, string 
    actor = new Actor(x, y, ch, name, color);
    if (pickable)
       actor->setPickable(pickable);
+
+   return actor;
 }
