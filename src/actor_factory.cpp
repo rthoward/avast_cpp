@@ -139,3 +139,24 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type, string name) {
 
    return actor;
 }
+
+Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type, string name = "") {
+   Actor *actor = NULL;
+   int ch = ' ';
+   TCODColor color = TCODColor::white;
+   Pickable *pickable = NULL;
+
+   switch(type) {
+      case ActorFactory::P_HEALING:
+         ch = '!';
+         name = "potion of healing";
+         pickable = new Healer(5);
+         break;
+      default:
+         break;
+   }
+
+   actor = new Actor(x, y, ch, name, color);
+   if (pickable)
+      actor->setPickable(pickable);
+}

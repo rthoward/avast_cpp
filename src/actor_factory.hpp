@@ -30,6 +30,7 @@ public:
    Actor *genPlayer(int x, int y, string name);
    Actor *generate(int x, int y, ActorType type, string name = "");
    Actor *genWeapon(int x, int y, ActorType type, string name = "");
+   Actor *genItem(int x, int y, ActorType type, string name = "");
 
 };
 
