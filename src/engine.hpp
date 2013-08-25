@@ -5,6 +5,7 @@
 class Map;
 class GUI;
 class Actor;
+class PlayerStat;
 
 class Engine {
 
@@ -17,7 +18,7 @@ private:
    int currentDLevel;
    int maxDLevel;
    int turn;
-   bool telepathy;
+   PlayerStat *playerStat;
 
    int screenWidth, screenHeight;
    TCOD_key_t lastKey;

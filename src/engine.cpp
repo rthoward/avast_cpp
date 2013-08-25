@@ -8,12 +8,14 @@
 #include "map.hpp"
 #include "gui.hpp"
 #include "actor_factory.hpp"
+#include "player_stat.hpp"
 #include <string>
 
 Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
    fovRadius = 10;
    computeFov = true;
+   playerStat = new PlayerStat();
    turn = 1;
    telepathy = false;
    ActorFactory factory;

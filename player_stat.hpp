@@ -1,4 +1,4 @@
-#ifndef __PLAYER_STAT_HPP_
+#ifndef __PLAYER_STAT_HPP__
 #define __PLAYER_STAT_HPP__
 
 class PlayerStat {
