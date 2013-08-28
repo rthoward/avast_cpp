@@ -119,11 +119,13 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
    int ch = ')';
    TCODColor color = TCODColor::white;
    Equippable *equippable;
+   Equippable::EquipType equipType;
 
    switch (type) {
       case ActorFactory::W_STEEL_LONGSWORD:
          myName = "steel longsword";
          equippable = new Equippable(3, 0);
+         equipType = Equippable::WEAPON;
          color = TCODColor::lightBlue;
          break;
       default:
@@ -135,7 +137,7 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
 
    actor = new Actor(x, y, ch, myName, color);
    actor->setPickable(new Pickable);
-   equippable->setType(Equippable::WEAPON);
+   equippable->setType(equipType);
    actor->setEquippable(equippable);
 
    return actor;

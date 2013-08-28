@@ -7,6 +7,7 @@
 #include "engine.hpp"
 #include "gui.hpp"
 #include "player_stat.hpp"
+#include "equipment.hpp"
 #include "map.hpp"
 #include "ai.hpp"
 #include <iostream>
@@ -188,7 +189,10 @@ Actor *PlayerAI::chooseFromInventory(Actor *me) {
 
    for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
       item = *iter;
-      con.print(2, y, "(%c) - %s", shortcut, item->getName().c_str());
+      string itemName = item->getName();
+      if (me->getEquipment()->isEquipped(me, item))
+         itemName += " [equipped]";
+      con.print(2, y, "(%c) - %s", shortcut, itemName.c_str());
       y++;
       shortcut++;
    }

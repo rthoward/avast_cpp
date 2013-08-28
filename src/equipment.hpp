@@ -10,9 +10,10 @@ public:
    Equipment();
 
    bool equip(Actor *me, Actor *equipment);
-   bool remove(Actor *me, Actor *equipment);
+   bool remove(Actor *me, Actor *equipment);   
 
    float getWeaponStr() const;
+   bool isEquipped(Actor *me, Actor *item) const;
 
 private:
    Actor *head;
