@@ -1,6 +1,6 @@
 #include "equippable.hpp"
 
-Equippable::Equippable(int power, int def) : power(power), def(def) {};
+Equippable::Equippable(float power, float def) : power(power), def(def) {};
 
 void Equippable::setPower(float power)          { this->power = power; }
 void Equippable::setDef(float def)              { this->def = def; }

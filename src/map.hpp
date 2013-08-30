@@ -27,7 +27,7 @@ public:
    Actor* getItemAt(int x, int y)  const;
 
    void addMonster(int x, int y);
-   void addItem(int x, int y);
+   void addItems();
    void moveActorRandom(Actor *actor);
    void addStaircases();
 

@@ -25,6 +25,7 @@ protected:
 
    void renderBar(int x, int y, int width, string name, float value,
          float maxValue, const TCODColor &barCol, const TCODColor &backCol);
+   void stats(int x, int y, int width) const;
    void debug(int x, int y, int width) const;
 };
 

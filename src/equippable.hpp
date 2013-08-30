@@ -5,7 +5,7 @@ class Equippable {
 
 public:
 
-   Equippable(int power, int def);
+   Equippable(float power, float def);
 
    enum EquipType {
       WEAPON,

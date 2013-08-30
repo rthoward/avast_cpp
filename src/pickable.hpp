@@ -4,8 +4,7 @@
 class Pickable {
 
 public:
-   virtual ~Pickable();
-
+   
    bool pick(Actor *me, Actor *wearer);
    virtual bool use(Actor *me, Actor *wearer);
 };
@@ -18,6 +17,16 @@ public:
 
 private:
    float amount;
+};
+
+class EquipmentPickable : public Pickable {
+public:
+   bool use(Actor *me, Actor *wearer);
+};
+
+class DeathPickable : public Pickable {
+public:
+   bool use(Actor *me, Actor *wearer);
 };
 
 #endif

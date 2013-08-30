@@ -50,7 +50,7 @@ bool Actor::tryPickUp(Actor *me, Actor *item) {
       engine.getGUI()->message(msg);
       return false;
    }
-   else if ( !(item->getType() == ITEM) ) {
+   else if (!item->isItem()) {
       engine.getGUI()->message(msg);
       return false;
    }
@@ -88,22 +88,15 @@ bool Actor::tryEquip(Actor *me, Actor *item) {
 }
 
 bool Actor::isBlocking() const         { return blocks && !isDead(); }
+bool Actor::isItem() const             { return (this->pickable != NULL); }
+bool Actor::isEquipment() const        { return (this->equippable != NULL); }
+bool Actor::isAttackable() const       { return (this->destructible != NULL && !isDead()); }
+
 bool Actor::isDead() const {
    if (destructible)
       return destructible->isDead();
    else
       return false;
-}
-enum Actor::Type Actor::getType() const {
-   if (pickable)
-      return ITEM;
-   else if (this == engine.getPlayer())
-      return PLAYER;
-   else if (ai) {
-      if (isDead())  return CORPSE;
-      else           return MONSTER; 
-   }
-   return UNKNOWN;
 }
 
 void Actor::addExp(int exp) {

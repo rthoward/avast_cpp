@@ -12,15 +12,18 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
    if (!equipment->getEquippable())
       return false;
 
-
    switch (equipment->getEquippable()->getType()) {
-      case (Equippable::WEAPON):
+      case Equippable::WEAPON:
          if (weapon == NULL) {
-            weapon = equipment;
-            //me->getContainer()->remove(equipment);
+            weapon = equipment;            
             return true;
-         } else 
-            return false;
+         } 
+         break;
+      case Equippable::ARMOR_BODY:
+         if (body == NULL) {
+            body = equipment;
+            return true;
+         }
          break;
       default:
          return false;
@@ -31,9 +34,36 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
 }
 
 bool Equipment::isEquipped(Actor *me, Actor *equipment) const {
+   if (!equipment->isEquipment())
+      return false;
+
    switch(equipment->getEquippable()->getType()) {
-   case (Equippable::WEAPON):
+   case Equippable::WEAPON:
       if (this->weapon == equipment)      return true;
+      break;
+   case Equippable::ARMOR_BODY:
+      if (this->body == equipment)        return true;
+      break;
+   default:
+      return false;
+   }
+
+   return false;
+}
+
+bool Equipment::remove(Actor *me, Actor *equipment) {
+   switch(equipment->getEquippable()->getType()) {
+   case Equippable::WEAPON:
+      if (this->weapon == equipment) {
+         this->weapon = NULL;
+         return true;
+      }
+      break;
+   case Equippable::ARMOR_BODY:
+      if (this->body == equipment) {
+         this->body = NULL;
+         return true;
+      }
       break;
    default:
       return false;
@@ -47,4 +77,16 @@ float Equipment::getWeaponStr() const {
       return weapon->getEquippable()->getPower();
    else
       return 0;
+}
+
+int Equipment::getArmorDef() const {
+   int ac = 0;
+   if (body)
+      ac += body->getEquippable()->getDef();
+   if (head)
+      ac += head->getEquippable()->getDef();
+   if (feet)
+      ac += feet->getEquippable()->getDef();
+
+   return ac;
 }

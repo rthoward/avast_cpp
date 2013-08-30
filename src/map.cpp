@@ -1,5 +1,6 @@
 #include "libtcod.hpp"
 #include "actor_factory.hpp"
+#include "random_actor.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
 #include "ai.hpp"
@@ -57,6 +58,7 @@ Map::Map(int width, int height) : width(width), height(height) {
    BspListener listener(*this);
    bsp.traverseInvertedLevelOrder(&listener, NULL);
    addStaircases();
+   addItems();
 }
 
 Map::~Map() {
@@ -152,8 +154,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
    }
    else {
       TCODRandom *rng = TCODRandom::getInstance();
-      int numMonsters = rng->getInt(0, ROOM_MAX_MONSTERS);
-      int numItems = rng->getInt(0, ROOM_MAX_ITEMS);
+      int numMonsters = rng->getInt(0, ROOM_MAX_MONSTERS);      
 
       while(numMonsters > 0) {
          int x = rng->getInt(x1, x2);
@@ -164,16 +165,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
          else {
          }
          numMonsters--;
-      }
-
-      while (numItems > 0) {
-         int x = rng->getInt(x1, x2);
-         int y = rng->getInt(y1, y2);
-         if (canWalk(x, y)) {
-            addItem(x, y);
-         }
-         numItems--;
-      }
+      }      
    }
 
 }
@@ -183,37 +175,48 @@ void Map::addMonster(int x, int y) {
    Actor *monster;
 
    if (rng->getInt(0, 100) < 80) {
-      monster = actorFactory->generate(x, y, ActorFactory::M_ORC);
+      monster = actorFactory->generate(x, y, M_ORC);
    } else {
-      monster = actorFactory->generate(x, y, ActorFactory::M_TROLL);
+      monster = actorFactory->generate(x, y, M_TROLL);
    }
 
    engine.addActor(monster);
 }
 
-void Map::addItem(int x, int y) {
-   Actor *healthPotion = new Actor(x, y, '!', "potion of healing", TCODColor::violet);
-   healthPotion->setFloor(engine.getCurrentDLevel());
-   healthPotion->setBlocking(false);
-   healthPotion->setPickable(new Healer(4));
-   engine.addActor(healthPotion);
+void Map::addItems() {
+   TCODRandom *rng = TCODRandom::getInstance();
+
+   ActorFactory factory = ActorFactory();   
+   Actor *item;
+
+   int num_potions = rng->getInt(0, 20);
+   for (int i = 0; i < num_potions; i++) {
+      item = randomItem.getRandomItem();
+      moveActorRandom(item);
+      engine.addActor(item);
+   }
+
+   Actor *sword = factory.genEquipment(0, 0, W_STEEL_LONGSWORD);
+   Actor *bodyArmor = factory.genEquipment(0, 0, A_STEEL_BREASTPLATE);
+   moveActorRandom(sword);
+   moveActorRandom(bodyArmor);
+
+   engine.addActor(sword);
+   engine.addActor(bodyArmor);
 }
 
 void Map::addStaircases() {
    int currentFloor = engine.getCurrentDLevel();
 
-   Actor *upStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_UP);
-   Actor *downStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
+   Actor *upStaircase = actorFactory->generate(0, 0, F_STAIRS_UP);
+   Actor *downStaircase = actorFactory->generate(0, 0, F_STAIRS_DOWN);
    upStaircase->setFloor(currentFloor);
    downStaircase->setFloor(currentFloor);
  
-   upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
-   Actor *sword = actorFactory->genWeapon(upStaircase->getX() - 1, upStaircase->getY(), 
-         ActorFactory::W_STEEL_LONGSWORD);
+   upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());   
    moveActorRandom(downStaircase);
    engine.addActor(upStaircase);
    engine.addActor(downStaircase);
-   engine.addActor(sword);
 }
 
 void Map::moveActorRandom(Actor *actor) {

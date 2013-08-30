@@ -2,7 +2,9 @@
 #include "actor.hpp"
 #include "map.hpp"
 #include "engine.hpp"
+#include "random_actor.hpp"
 
+RandomItemGenerator randomItem;
 Engine engine(100, 60);
 
 int main() {

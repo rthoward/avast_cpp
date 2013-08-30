@@ -36,6 +36,7 @@ float Destructible::heal(float amount) {
 
 void Destructible::die(Actor *me) {
    // turn actor into corpse
+   hp = 0;
    me->setGlyph('%');
    me->setName(corpseName);
    engine.sendToBack(me);

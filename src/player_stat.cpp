@@ -17,5 +17,5 @@ void PlayerStat::setBlind(int duration) {
    blind += duration;
 }
 
-bool PlayerStat::isTelepathic() const        { return this->telepathy; }
-bool PlayerStat::isBlind() const             { return this->blind; }
+bool PlayerStat::isTelepathic() const        { return (this->telepathy > 0); }
+bool PlayerStat::isBlind() const             { return (this->blind > 0); }

@@ -16,7 +16,7 @@
 using namespace std;
 
 static inline float round(float val) {
-	return floor(val + 0.5);
+	return (float) floor(val + 0.5);
 }
 
 static const int MONS_TRACKING_TURNS = 3;
@@ -101,9 +101,16 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
          }
          break;
       case 'E' :
-         item = chooseFromInventory(me);
+         item = chooseFromInventory(me, "equipment");
          if (item) {
             me->tryEquip(me, item);
+            engine.setStatus(Engine::NEW_TURN);
+         }
+         break;
+      case 'R':
+         item = chooseFromInventory(me, "equipped");
+         if (item) {
+            me->getEquipment()->remove(me, item);
             engine.setStatus(Engine::NEW_TURN);
          }
          break;
@@ -134,7 +141,7 @@ bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
       me->moveTo(targetx, targety);
       return true;
    }
-   else if (actor->getType() == Actor::MONSTER) {
+   else if (actor->isAttackable()) {
       me->getAttacker()->attack(me, actor);
       return false;
    } else {
@@ -151,19 +158,17 @@ void PlayerAI::checkTile(Actor *actor) {
    string msg = "";
 
    if (actor) {
-      switch (actor->getType()) {
-         case Actor::ITEM:
-            msg = "You see here a "; msg += actor->getName() + ".";
-            break;
-         case Actor::CORPSE:
-            msg = "There is a "; msg += actor->getName() + " here.";
-            break;
-         case NULL:
-            msg = "You see nothing here.";
-         default: 
-            msg = "You see a ";
-            msg += actor->getName() + ".";
-            break;
+      if (actor->isItem()) {
+         msg = "You see here a "; 
+         msg += actor->getName() + ".";
+      }
+      else if (actor->isDead()) {     
+         msg = "There is a "; 
+         msg += actor->getName() + " here.";
+      }
+      else { 
+         msg = "You see a ";
+         msg += actor->getName() + ".";
       }
    } else {
       msg = "You see nothing here.";
@@ -172,14 +177,21 @@ void PlayerAI::checkTile(Actor *actor) {
    engine.getGUI()->message(msg);
 }
 
-Actor *PlayerAI::chooseFromInventory(Actor *me) {
+Actor *PlayerAI::chooseFromInventory(Actor *me, string filter) {
    static const int INV_WIDTH = 50;
    static const int INV_HEIGHT = 28;
    static TCODConsole con(INV_WIDTH, INV_HEIGHT);
+   string title = "";
+
+   // determine title of menu based on filter type. defaults to "inventory"
+   if (filter == "")
+      title = "inventory";
+   else
+      title = filter;
 
    con.setDefaultForeground(TCODColor(200, 180, 50));
    con.printFrame(0, 0, INV_WIDTH, INV_HEIGHT, true, TCOD_BKGND_DEFAULT,
-         "inventory");
+         title.c_str());
    con.setDefaultForeground(TCODColor::white);
    int shortcut = 'a';
    int y = 1;
@@ -189,6 +201,18 @@ Actor *PlayerAI::chooseFromInventory(Actor *me) {
 
    for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
       item = *iter;
+      
+      if (item == NULL)       continue;
+
+      // apply necessary filters
+      if (filter == "equipment") {
+         if (!item->isEquipment())
+            continue;
+      } else if (filter == "equipped") {
+         if (!me->getEquipment()->isEquipped(me, item))
+            continue;
+      }
+
       string itemName = item->getName();
       if (me->getEquipment()->isEquipped(me, item))
          itemName += " [equipped]";
@@ -308,7 +332,7 @@ void MonsterAI::moveOrAttack(Actor *me, int targetx, int targety) {
    int dy = targety - me->getY();
    int stepdx = (dx > 0 ? 1 : -1);
    int stepdy = (dy > 0 ? 1 : -1);
-   float distance = sqrtf(dx * dx + dy * dy);
+   float distance = sqrtf((float) dx * dx + dy * dy);
 
    // if out of melee range, move toward player
    if (distance >= 2) {

@@ -49,7 +49,7 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
    return actor;
 }
 
-Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type, 
+Actor *ActorFactory::generate(int x, int y, ActorType type, 
       string name) {
 
    // default humaniod actor
@@ -64,9 +64,9 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
    Container *container = NULL;
 
    switch (type) {
-      case ActorFactory::PLAYER: 
+      case PLAYER: 
          break;
-      case ActorFactory::M_ORC: 
+      case M_ORC: 
          myName = "orc";
          ch = 'o';
          color = TCODColor::desaturatedGreen;
@@ -74,7 +74,7 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
          destructible = new MonsterDestructible(10, 0, "dead orc");
          attacker = new Attacker(3);
          break;
-      case ActorFactory::M_TROLL:
+      case M_TROLL:
          myName = "troll";
          ch = 'T';
          color = TCODColor::lightYellow;
@@ -82,12 +82,12 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
          destructible = new MonsterDestructible(15, 0, "dead troll");
          attacker = new Attacker(5);
          break;
-      case ActorFactory::F_STAIRS_UP:
+      case F_STAIRS_UP:
          myName = "up stairs";
          ch = '<';
          color = TCODColor::white;
          break;
-      case ActorFactory::F_STAIRS_DOWN:
+      case F_STAIRS_DOWN:
          myName = "down stairs";
          ch = '>';
          color = TCODColor::white;
@@ -111,7 +111,7 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
    return actor;
 }
 
-Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
+Actor *ActorFactory::genEquipment(int x, int y, ActorType type) {
 
    string myName = "";
    Actor *actor;
@@ -122,28 +122,36 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
    Equippable::EquipType equipType;
 
    switch (type) {
-      case ActorFactory::W_STEEL_LONGSWORD:
+      case W_STEEL_LONGSWORD:
          myName = "steel longsword";
          equippable = new Equippable(3, 0);
          equipType = Equippable::WEAPON;
          color = TCODColor::lightBlue;
          break;
+      case A_STEEL_BREASTPLATE: 
+         myName = "steel breastplate";
+         ch = '[';
+         equippable = new Equippable(0, 3);
+         equipType = Equippable::ARMOR_BODY;
+         color = TCODColor::lightBlue;
+         break;
       default:
          myName = "steel longsword";
          equippable = new Equippable(3, 0);
+         equipType = Equippable::WEAPON;
          color = TCODColor::lightBlue;
          break;
    }
 
    actor = new Actor(x, y, ch, myName, color);
-   actor->setPickable(new Pickable);
+   actor->setPickable(new EquipmentPickable);
    equippable->setType(equipType);
    actor->setEquippable(equippable);
 
    return actor;
 }
 
-Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type) {
+Actor *ActorFactory::genItem(ActorType type) {
    Actor *actor = NULL;
    int ch = ' ';
    string name = "";
@@ -151,16 +159,21 @@ Actor *ActorFactory::genItem(int x, int y, ActorFactory::ActorType type) {
    Pickable *pickable = NULL;
 
    switch(type) {
-      case ActorFactory::P_HEALING:
+      case P_HEALING:
          ch = '!';
          name = "potion of healing";
          pickable = new Healer(5);
+         break;
+      case P_DEATH:
+         ch = '!';
+         name = "potion of death";
+         pickable = new DeathPickable();
          break;
       default:
          break;
    }
 
-   actor = new Actor(x, y, ch, name, color);
+   actor = new Actor(0, 0, ch, name, color);
    if (pickable)
       actor->setPickable(pickable);
 
