@@ -134,7 +134,7 @@ bool PlayerAI::moveOrAttack(Actor *me, int targetx, int targety) {
       me->moveTo(targetx, targety);
       return true;
    }
-   else if (actor->getType() == Actor::MONSTER) {
+   else if (actor->isAttackable()) {
       me->getAttacker()->attack(me, actor);
       return false;
    } else {
@@ -151,19 +151,17 @@ void PlayerAI::checkTile(Actor *actor) {
    string msg = "";
 
    if (actor) {
-      switch (actor->getType()) {
-         case Actor::ITEM:
-            msg = "You see here a "; msg += actor->getName() + ".";
-            break;
-         case Actor::CORPSE:
-            msg = "There is a "; msg += actor->getName() + " here.";
-            break;
-         case NULL:
-            msg = "You see nothing here.";
-         default: 
-            msg = "You see a ";
-            msg += actor->getName() + ".";
-            break;
+      if (actor->isItem()) {
+         msg = "You see here a "; 
+         msg += actor->getName() + ".";
+      }
+      else if (actor->isDead()) {     
+         msg = "There is a "; 
+         msg += actor->getName() + " here.";
+      }
+      else { 
+         msg = "You see a ";
+         msg += actor->getName() + ".";
       }
    } else {
       msg = "You see nothing here.";

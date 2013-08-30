@@ -34,6 +34,9 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
 }
 
 bool Equipment::isEquipped(Actor *me, Actor *equipment) const {
+   if (!equipment->isEquipment())
+      return false;
+
    switch(equipment->getEquippable()->getType()) {
    case Equippable::WEAPON:
       if (this->weapon == equipment)      return true;

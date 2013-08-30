@@ -18,17 +18,7 @@ class Actor {
 public:
    Actor(int x, int y, int ch, string name, const TCODColor &col);
    ~Actor();
-
-   enum Type {
-      PLAYER,
-      MONSTER,
-      ITEM,
-      CORPSE,
-      STAIRS_UP,
-      STAIRS_DOWN,
-      UNKNOWN
-   };
-
+  
    void render() const;
    void update();
 
@@ -37,9 +27,12 @@ public:
    bool tryPickUp(Actor *me, Actor *item);
    bool tryEquip(Actor *me, Actor *item);
 
-   // status
+   // status, attributes
    bool isBlocking() const;
    bool isDead() const;
+   bool isItem() const;
+   bool isEquipment() const;
+   bool isAttackable() const;
 
    // accessors
    int getX() const;
@@ -51,8 +44,7 @@ public:
    Container *getContainer() const;
    Pickable *getPickable() const;
    Equippable *getEquippable() const;
-   Equipment *getEquipment() const;
-   Type getType() const;
+   Equipment *getEquipment() const;   
    bool getFovOnly() const;
    int getChar() const;
    int getFloor() const;
