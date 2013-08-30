@@ -208,7 +208,7 @@ void Map::addStaircases() {
    downStaircase->setFloor(currentFloor);
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());
-   Actor *sword = actorFactory->genWeapon(upStaircase->getX() - 1, upStaircase->getY(), 
+   Actor *sword = actorFactory->genEquipment(upStaircase->getX() - 1, upStaircase->getY(), 
          ActorFactory::W_STEEL_LONGSWORD);
    moveActorRandom(downStaircase);
    engine.addActor(upStaircase);

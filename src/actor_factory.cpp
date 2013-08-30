@@ -111,7 +111,7 @@ Actor *ActorFactory::generate(int x, int y, ActorFactory::ActorType type,
    return actor;
 }
 
-Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
+Actor *ActorFactory::genEquipment(int x, int y, ActorType type) {
 
    string myName = "";
    Actor *actor;
@@ -126,6 +126,12 @@ Actor *ActorFactory::genWeapon(int x, int y, ActorType type) {
          myName = "steel longsword";
          equippable = new Equippable(3, 0);
          equipType = Equippable::WEAPON;
+         color = TCODColor::lightBlue;
+         break;
+      case A_STEEL_BREASTPLATE: 
+         myName = "steel breastplate";
+         equippable = new Equippable(0, 3);
+         equipType = Equippable::ARMOR_BODY;
          color = TCODColor::lightBlue;
          break;
       default:
