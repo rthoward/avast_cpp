@@ -20,7 +20,7 @@ public:
    PlayerAI();
    void update(Actor *me);
    void handleActionKey(Actor *me, int ascii);
-   Actor *chooseFromInventory(Actor *me);
+   Actor *chooseFromInventory(Actor *me, string filter = "");
 
    enum AIState {
       NORMAL,
