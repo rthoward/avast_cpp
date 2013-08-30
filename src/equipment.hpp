@@ -13,6 +13,7 @@ public:
    bool remove(Actor *me, Actor *equipment);   
 
    float getWeaponStr() const;
+   int getArmorDef() const;
    bool isEquipped(Actor *me, Actor *item) const;
 
 private:

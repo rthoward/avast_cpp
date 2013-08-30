@@ -78,3 +78,15 @@ float Equipment::getWeaponStr() const {
    else
       return 0;
 }
+
+int Equipment::getArmorDef() const {
+   int ac = 0;
+   if (body)
+      ac += body->getEquippable()->getDef();
+   if (head)
+      ac += head->getEquippable()->getDef();
+   if (feet)
+      ac += feet->getEquippable()->getDef();
+
+   return ac;
+}

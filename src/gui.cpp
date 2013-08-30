@@ -1,6 +1,8 @@
 #include "libtcod.hpp"
 #include "gui.hpp"
 #include "actor.hpp"
+#include "attacker.hpp"
+#include "equipment.hpp"
 #include "destructible.hpp"
 #include "engine.hpp"
 #include <string.h>
@@ -43,7 +45,8 @@ void GUI::render() {
       if (colorCoef < 1.0f)      colorCoef += 0.3f;
    }
 
-   debug(1, 3, BAR_WIDTH);
+   stats(1, 3, BAR_WIDTH);
+   debug(1, 7, BAR_WIDTH);
 
    TCODConsole::blit(con, 0, 0, engine.getScreenWidth(), PANEL_HEIGHT,
          TCODConsole::root, 0, engine.getScreenHeight() - PANEL_HEIGHT);
@@ -81,11 +84,23 @@ void GUI::message(string text, const TCODColor &col) {
    log.push(msg);
 }
 
+void GUI::stats(int x, int y, int width) const {
+   float str = engine.getPlayer()->getAttacker()->getPower();
+   float wep_str = engine.getPlayer()->getEquipment()->getWeaponStr();
+   float def = engine.getPlayer()->getDestructible()->getDefense();
+   int armor_def = engine.getPlayer()->getEquipment()->getArmorDef();
+   con->setDefaultForeground(TCODColor::white);
+   con->printEx(x, y + 1, TCOD_BKGND_NONE, TCOD_LEFT,
+      "power: %d + %d", (int) str, (int) wep_str);
+   con->printEx(x, y + 2, TCOD_BKGND_NONE, TCOD_LEFT,
+      "def: %d + %d", (int) def, armor_def);
+}
+
 void GUI::debug(int x, int y, int width) const {
    con->setDefaultForeground(TCODColor::white);
-   con->printEx(x + width / 2, y, TCOD_BKGND_NONE, TCOD_CENTER,
+   con->printEx(x, y, TCOD_BKGND_NONE, TCOD_LEFT,
          "actors: %d", engine.getActorList().size());
-   con->printEx(x + width / 2, y + 1, TCOD_BKGND_NONE, TCOD_CENTER,
+   con->printEx(x, y + 1, TCOD_BKGND_NONE, TCOD_LEFT,
          "turn: %d", engine.getTurn());
 }
 
