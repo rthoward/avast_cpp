@@ -12,15 +12,18 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
    if (!equipment->getEquippable())
       return false;
 
-
    switch (equipment->getEquippable()->getType()) {
-      case (Equippable::WEAPON):
+      case Equippable::WEAPON:
          if (weapon == NULL) {
-            weapon = equipment;
-            //me->getContainer()->remove(equipment);
+            weapon = equipment;            
             return true;
-         } else 
-            return false;
+         } 
+         break;
+      case Equippable::ARMOR_BODY:
+         if (body == NULL) {
+            body = equipment;
+            return true;
+         }
          break;
       default:
          return false;
@@ -32,8 +35,11 @@ bool Equipment::equip(Actor *me, Actor *equipment) {
 
 bool Equipment::isEquipped(Actor *me, Actor *equipment) const {
    switch(equipment->getEquippable()->getType()) {
-   case (Equippable::WEAPON):
+   case Equippable::WEAPON:
       if (this->weapon == equipment)      return true;
+      break;
+   case Equippable::ARMOR_BODY:
+      if (this->body == equipment)        return true;
       break;
    default:
       return false;

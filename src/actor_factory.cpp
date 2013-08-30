@@ -130,6 +130,7 @@ Actor *ActorFactory::genEquipment(int x, int y, ActorType type) {
          break;
       case A_STEEL_BREASTPLATE: 
          myName = "steel breastplate";
+         ch = '[';
          equippable = new Equippable(0, 3);
          equipType = Equippable::ARMOR_BODY;
          color = TCODColor::lightBlue;
