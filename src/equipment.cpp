@@ -48,6 +48,27 @@ bool Equipment::isEquipped(Actor *me, Actor *equipment) const {
    return false;
 }
 
+bool Equipment::remove(Actor *me, Actor *equipment) {
+   switch(equipment->getEquippable()->getType()) {
+   case Equippable::WEAPON:
+      if (this->weapon == equipment) {
+         this->weapon = NULL;
+         return true;
+      }
+      break;
+   case Equippable::ARMOR_BODY:
+      if (this->body == equipment) {
+         this->body = NULL;
+         return true;
+      }
+      break;
+   default:
+      return false;
+   }
+
+   return false;
+}
+
 float Equipment::getWeaponStr() const {
    if (weapon)
       return weapon->getEquippable()->getPower();
