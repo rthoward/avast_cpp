@@ -36,3 +36,7 @@ bool Healer::use(Actor *me, Actor *wearer) {
    }
    return false;
 }
+
+bool EquipmentPickable::use(Actor *me, Actor *wearer) {
+   return true;
+}

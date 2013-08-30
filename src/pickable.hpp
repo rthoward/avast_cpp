@@ -20,4 +20,9 @@ private:
    float amount;
 };
 
+class EquipmentPickable : public Pickable {
+public:
+   bool use(Actor *me, Actor *wearer);
+};
+
 #endif

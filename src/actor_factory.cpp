@@ -143,7 +143,7 @@ Actor *ActorFactory::genEquipment(int x, int y, ActorType type) {
    }
 
    actor = new Actor(x, y, ch, myName, color);
-   actor->setPickable(new Pickable);
+   actor->setPickable(new EquipmentPickable);
    equippable->setType(equipType);
    actor->setEquippable(equippable);
 
