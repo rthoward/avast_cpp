@@ -138,6 +138,7 @@ Actor *ActorFactory::genEquipment(int x, int y, ActorType type) {
       default:
          myName = "steel longsword";
          equippable = new Equippable(3, 0);
+         equipType = Equippable::WEAPON;
          color = TCODColor::lightBlue;
          break;
    }
