@@ -12,12 +12,12 @@ using namespace std;
 class ItemRarity {
 public:
    ActorType type;
-   int rarity;
+   float rarity;
    float weight;
 
    ItemRarity() {};
 
-   ItemRarity(ActorType type, int rarity) {
+   ItemRarity(ActorType type, float rarity) {
       this->type = type;
       this->rarity = rarity;
       if (rarity == 0)
