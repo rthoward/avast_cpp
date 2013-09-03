@@ -1,5 +1,6 @@
 #include "libtcod.hpp"
 #include "actor_factory.hpp"
+#include "random_actor.hpp"
 #include "destructible.hpp"
 #include "attacker.hpp"
 #include "ai.hpp"
@@ -174,9 +175,9 @@ void Map::addMonster(int x, int y) {
    Actor *monster;
 
    if (rng->getInt(0, 100) < 80) {
-      monster = actorFactory->generate(x, y, ActorFactory::M_ORC);
+      monster = actorFactory->generate(x, y, M_ORC);
    } else {
-      monster = actorFactory->generate(x, y, ActorFactory::M_TROLL);
+      monster = actorFactory->generate(x, y, M_TROLL);
    }
 
    engine.addActor(monster);
@@ -184,18 +185,19 @@ void Map::addMonster(int x, int y) {
 
 void Map::addItems() {
    TCODRandom *rng = TCODRandom::getInstance();
+
    ActorFactory factory = ActorFactory();   
    Actor *item;
 
    int num_potions = rng->getInt(0, 20);
    for (int i = 0; i < num_potions; i++) {
-      item = factory.genItem(0, 0, ActorFactory::P_HEALING);
+      item = randomItem.getRandomItem();
       moveActorRandom(item);
       engine.addActor(item);
    }
 
-   Actor *sword = factory.genEquipment(0, 0, ActorFactory::W_STEEL_LONGSWORD);
-   Actor *bodyArmor = factory.genEquipment(0, 0, ActorFactory::A_STEEL_BREASTPLATE);
+   Actor *sword = factory.genEquipment(0, 0, W_STEEL_LONGSWORD);
+   Actor *bodyArmor = factory.genEquipment(0, 0, A_STEEL_BREASTPLATE);
    moveActorRandom(sword);
    moveActorRandom(bodyArmor);
 
@@ -206,8 +208,8 @@ void Map::addItems() {
 void Map::addStaircases() {
    int currentFloor = engine.getCurrentDLevel();
 
-   Actor *upStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_UP);
-   Actor *downStaircase = actorFactory->generate(0, 0, ActorFactory::F_STAIRS_DOWN);
+   Actor *upStaircase = actorFactory->generate(0, 0, F_STAIRS_UP);
+   Actor *downStaircase = actorFactory->generate(0, 0, F_STAIRS_DOWN);
    upStaircase->setFloor(currentFloor);
    downStaircase->setFloor(currentFloor);
  

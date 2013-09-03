@@ -5,8 +5,6 @@
 #include "engine.hpp"
 #include "pickable.hpp"
 
-Pickable::~Pickable() {}
-
 bool Pickable::pick(Actor *me, Actor *wearer) {
    if (wearer->getContainer() && wearer->getContainer()->add(me)) {
       engine.removeActor(me);
@@ -38,5 +36,12 @@ bool Healer::use(Actor *me, Actor *wearer) {
 }
 
 bool EquipmentPickable::use(Actor *me, Actor *wearer) {
+   return true;
+}
+
+bool DeathPickable::use(Actor *me, Actor *wearer) {
+   if (me->getDestructible())
+      me->getDestructible()->die(me);
+
    return true;
 }
