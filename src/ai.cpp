@@ -99,6 +99,15 @@ void PlayerAI::handleActionKey(Actor *me, int ascii) {
             engine.setStatus(Engine::NEW_TURN);
          }
          break;
+      case 'd':
+         item = chooseFromInventory(me);
+         if (drop(me, item))
+            engine.getGUI()->message("You drop the " + item->getName());         
+         else {          
+            engine.getGUI()->message("You could not drop the " + 
+               item->getName(), TCODColor::lightRed);
+         }
+         break;
       case 'E' :
          item = chooseFromInventory(me, "equipment");
          if (item) {
@@ -368,4 +377,14 @@ void AI::moveRandom(Actor *me) {
 
    if (try_count > 0)
       me->moveTo(me->getX() + dx, me->getY() + dy);
+}
+
+bool AI::drop(Actor *me, Actor *item) {
+   if (item->getPickable()) {
+      item->moveTo(me->getX(), me->getY());
+      me->getContainer()->remove(item);
+      engine.addActor(item);
+      return true;
+   } else
+      return false;
 }

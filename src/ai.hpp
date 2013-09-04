@@ -22,8 +22,9 @@ protected:
       AUTORUN_DOWN
    } aiState;
 
-   void setState(enum AIState state);
+   void setState(enum AIState state) { this->aiState = state; }
    void moveRandom(Actor *me);
+   bool drop(Actor *me, Actor *item);
 };
 
 class PlayerAI : public AI {
