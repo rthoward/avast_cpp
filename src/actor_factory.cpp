@@ -174,6 +174,7 @@ Actor *ActorFactory::genItem(ActorType type) {
    }
 
    actor = new Actor(0, 0, ch, name, color);
+   actor->setBlocking(false);
    if (pickable)
       actor->setPickable(pickable);
 
