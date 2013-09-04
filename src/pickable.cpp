@@ -40,8 +40,8 @@ bool EquipmentPickable::use(Actor *me, Actor *wearer) {
 }
 
 bool DeathPickable::use(Actor *me, Actor *wearer) {
-   if (me->getDestructible())
-      me->getDestructible()->die(me);
+   if (wearer->getDestructible())
+      wearer->getDestructible()->die(wearer);
 
    return true;
 }
