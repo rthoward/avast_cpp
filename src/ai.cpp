@@ -21,11 +21,10 @@ static inline float round(float val) {
 
 static const int MONS_TRACKING_TURNS = 3;
 
-AI::~AI() {};
-
-PlayerAI::PlayerAI() {
+AI::AI() {
    aiState = NORMAL;
 }
+AI::~AI() {};
 
 void PlayerAI::update(Actor *me) {
 
@@ -307,7 +306,9 @@ void PlayerAI::tryStaircase(Actor *me, bool up) {
 
 // monster AI -----------------------------------------------------------------
 
-MonsterAI::MonsterAI() : moveCount(0) {};
+MonsterAI::MonsterAI() : AI() {
+   moveCount = 0;
+};
 
 void MonsterAI::update(Actor *me) {
    if (me->getDestructible() && me->getDestructible()->isDead())
@@ -353,7 +354,7 @@ void MonsterAI::moveOrAttack(Actor *me, int targetx, int targety) {
 
 }
 
-void MonsterAI::moveRandom(Actor *me) {
+void AI::moveRandom(Actor *me) {
    int dx = 0, dy = 0;
    int try_count = 4;
    TCODRandom *rng = TCODRandom::getInstance();

@@ -8,19 +8,11 @@ class AI {
 
 public:
 
+   AI();
    virtual void update(Actor *me)=0;
-
    virtual ~AI();
 
-};
-
-class PlayerAI : public AI {
-
-public:
-   PlayerAI();
-   void update(Actor *me);
-   void handleActionKey(Actor *me, int ascii);
-   Actor *chooseFromInventory(Actor *me, string filter = "");
+protected:   
 
    enum AIState {
       NORMAL,
@@ -28,10 +20,21 @@ public:
       AUTORUN_RIGHT,
       AUTORUN_UP,
       AUTORUN_DOWN
-   };
+   } aiState;
 
-protected:
-   AIState aiState;
+   void setState(enum AIState state);
+   void moveRandom(Actor *me);
+};
+
+class PlayerAI : public AI {
+
+public:
+   PlayerAI() : AI() {};
+   void update(Actor *me);
+   void handleActionKey(Actor *me, int ascii);
+   Actor *chooseFromInventory(Actor *me, string filter = "");   
+
+protected:   
 
    bool moveOrAttack(Actor *me, int targetx, int targety);
    void checkTile(Actor *actor);
@@ -48,7 +51,6 @@ public:
 
 protected:
    void moveOrAttack(Actor *me, int targetx, int targety);
-   void moveRandom(Actor *me);
    int moveCount;
 };
 
