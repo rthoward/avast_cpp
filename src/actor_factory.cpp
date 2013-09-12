@@ -49,8 +49,7 @@ Actor *ActorFactory::genPlayer(int x, int y, string name) {
    return actor;
 }
 
-Actor *ActorFactory::generate(int x, int y, ActorType type, 
-      string name) {
+Actor *ActorFactory::generate(ActorType type, string name) {
 
    // default humaniod actor
    string myName = "";
@@ -82,6 +81,14 @@ Actor *ActorFactory::generate(int x, int y, ActorType type,
          destructible = new MonsterDestructible(15, 0, "dead troll");
          attacker = new Attacker(5);
          break;
+      case M_NEWT:
+         myName = "newt";
+         ch = ':';
+         color = TCODColor::lightYellow;
+         ai = new MonsterAI();
+         destructible = new MonsterDestructible(5, 0, "dead newt");
+         attacker = new Attacker(1);
+         break;
       case F_STAIRS_UP:
          myName = "up stairs";
          ch = '<';
@@ -95,7 +102,7 @@ Actor *ActorFactory::generate(int x, int y, ActorType type,
          break;
    }
 
-   actor = new Actor(x, y, ch, myName, color);
+   actor = new Actor(0, 0, ch, myName, color);
 
    if (ai)
       actor->setAI(ai);

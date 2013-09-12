@@ -6,6 +6,7 @@ enum ActorType {
    
    M_ORC,
    M_TROLL,
+   M_NEWT,
 
    P_HEALING,
    P_DEATH,

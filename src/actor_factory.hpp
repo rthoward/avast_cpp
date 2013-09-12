@@ -15,7 +15,7 @@ public:
    ActorFactory();   
 
    Actor *genPlayer(int x, int y, string name);
-   Actor *generate(int x, int y, ActorType type, string name = "");
+   Actor *generate(ActorType type, string name = "");
    Actor *genEquipment(int x, int y, ActorType type);
    Actor *genItem(ActorType type);
 };
