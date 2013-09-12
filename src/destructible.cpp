@@ -14,6 +14,8 @@ float Destructible::takeDamage(Actor *me, float damage) {
    
    // defense negates some damage
    damage -= defense;
+   if (damage < 0)
+      damage = 0;
    if (damage > 0) {
       hp -= damage;
       if (isDead())
