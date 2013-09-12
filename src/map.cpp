@@ -170,16 +170,9 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 
 }
 
-void Map::addMonster(int x, int y) {
-   TCODRandom *rng = TCODRandom::getInstance();
-   Actor *monster;
-
-   if (rng->getInt(0, 100) < 80) {
-      monster = actorFactory->generate(x, y, M_ORC);
-   } else {
-      monster = actorFactory->generate(x, y, M_TROLL);
-   }
-
+void Map::addMonster(int x, int y) {   
+   Actor *monster = randomMonster.getRandomMonster();   
+   monster->moveTo(x, y);
    engine.addActor(monster);
 }
 
@@ -208,8 +201,8 @@ void Map::addItems() {
 void Map::addStaircases() {
    int currentFloor = engine.getCurrentDLevel();
 
-   Actor *upStaircase = actorFactory->generate(0, 0, F_STAIRS_UP);
-   Actor *downStaircase = actorFactory->generate(0, 0, F_STAIRS_DOWN);
+   Actor *upStaircase = actorFactory->generate(F_STAIRS_UP);
+   Actor *downStaircase = actorFactory->generate(F_STAIRS_DOWN);
    upStaircase->setFloor(currentFloor);
    downStaircase->setFloor(currentFloor);
  

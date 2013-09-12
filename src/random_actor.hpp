@@ -9,15 +9,15 @@
 #include <stdio.h>
 using namespace std;
 
-class ItemRarity {
+class ActorRarity {
 public:
    ActorType type;
    float rarity;
    float weight;
 
-   ItemRarity() {};
+   ActorRarity() {};
 
-   ItemRarity(ActorType type, float rarity) {
+   ActorRarity(ActorType type, float rarity) {
       this->type = type;
       this->rarity = rarity;
       if (rarity == 0)
@@ -31,13 +31,13 @@ class RandomItemGenerator {
 
 public:
    RandomItemGenerator() {
-      rarityList = vector<ItemRarity>();
+      rarityList = vector<ActorRarity>();
 
       // put all items here with their rarity
-      rarityList.push_back(ItemRarity(P_HEALING,         2));
-      rarityList.push_back(ItemRarity(P_DEATH,           8));
+      rarityList.push_back(ActorRarity(P_HEALING,         2));
+      rarityList.push_back(ActorRarity(P_DEATH,           8));
 
-      vector<ItemRarity>::iterator iter;
+      vector<ActorRarity>::iterator iter;
       for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {         
          totalWeight += iter->weight;
       }
@@ -47,17 +47,14 @@ public:
    Actor *getRandomItem(float bias = 0) {
       ActorFactory factory = ActorFactory();
       TCODRandom *rng = TCODRandom::getInstance();
-      float roll = rng->getFloat(bias, totalWeight);
-
-      printf("rolled a %f\n", roll);
+      float roll = rng->getFloat(bias, totalWeight);     
 
       float currentWeight = totalWeight;
-      vector<ItemRarity>::iterator iter;
+      vector<ActorRarity>::iterator iter;
       for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {
          roll -= iter->weight;
          if (roll <= 0) {
-            Actor *actor = factory.genItem(iter->type);
-            printf("generated a %s\n", actor->getName().c_str());
+            Actor *actor = factory.genItem(iter->type);           
             return actor;
          }
       }
@@ -66,10 +63,50 @@ public:
    }
 
 private:
-   vector<ItemRarity> rarityList;
+   vector<ActorRarity> rarityList;
+   float totalWeight;
+};
+
+class RandomMonsterGenerator {
+public:
+   RandomMonsterGenerator() {
+      rarityList = vector<ActorRarity>();
+
+      // put all items here with their rarity
+      rarityList.push_back(ActorRarity(M_ORC,         3));
+      rarityList.push_back(ActorRarity(M_NEWT,        2));
+      rarityList.push_back(ActorRarity(M_TROLL,       8));
+
+      vector<ActorRarity>::iterator iter;
+      for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {         
+         totalWeight += iter->weight;
+      }
+   }
+
+   Actor *getRandomMonster(float bias = 0) {
+      ActorFactory factory = ActorFactory();
+      TCODRandom *rng = TCODRandom::getInstance();
+      float roll = rng->getFloat(bias, totalWeight);     
+
+      float currentWeight = totalWeight;
+      vector<ActorRarity>::iterator iter;
+      for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {
+         roll -= iter->weight;
+         if (roll <= 0) {
+            Actor *actor = factory.generate(iter->type);           
+            return actor;
+         }
+      }
+
+      return NULL;
+   }
+
+private:
+   vector<ActorRarity> rarityList;
    float totalWeight;
 };
 
 extern RandomItemGenerator randomItem;
+extern RandomMonsterGenerator randomMonster;
 
 #endif
