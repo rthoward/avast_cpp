@@ -397,7 +397,8 @@ bool AI::drop(Actor *me, Actor *item) {
 
 void GopherAI::update(Actor *me) {
    TCODRandom *rng = TCODRandom::getInstance();   
-   if (rng->getInt(1, 100) <= 20)
+   int diceRoll = rng->getInt(1, 100);
+   if (diceRoll <= 20)
       digPit(me);
    else
       MonsterAI::update(me);
@@ -405,12 +406,8 @@ void GopherAI::update(Actor *me) {
 
 void GopherAI::digPit(Actor *me) {
    Actor *pit;
-   
-   if ( !engine.getMap()->getActorAt(me->getX(), me->getY()) ) {
-      ActorFactory factory = ActorFactory();
-      pit = factory.generate(F_PIT);
-      pit->moveTo(me->getX(), me->getY());
-      engine.addActor(pit);
-      printf("I dug a pit!\n");
-   }      
+   ActorFactory factory = ActorFactory();
+   pit = factory.generate(F_PIT);
+   pit->moveTo(me->getX(), me->getY());
+   engine.addActor(pit);
 }
