@@ -106,6 +106,7 @@ Actor *ActorFactory::generate(ActorType type, string name) {
          myName = "down stairs";
          ch = '>';
          color = TCODColor::white;
+         break;
       case F_PIT:
          myName = "pit";
          ch = '^';
