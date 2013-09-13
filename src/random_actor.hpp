@@ -76,6 +76,7 @@ public:
       rarityList.push_back(ActorRarity(M_ORC,         3));
       rarityList.push_back(ActorRarity(M_NEWT,        2));
       rarityList.push_back(ActorRarity(M_TROLL,       8));
+      rarityList.push_back(ActorRarity(M_GOPHER,      9));
 
       vector<ActorRarity>::iterator iter;
       for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {         

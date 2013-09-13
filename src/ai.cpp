@@ -5,8 +5,10 @@
 #include "pickable.hpp"
 #include "container.hpp"
 #include "engine.hpp"
+#include "actor_list.hpp"
 #include "gui.hpp"
 #include "player_stat.hpp"
+#include "random_actor.hpp"
 #include "equipment.hpp"
 #include "map.hpp"
 #include "ai.hpp"
@@ -166,14 +168,18 @@ void PlayerAI::checkTile(Actor *actor) {
    string msg = "";
 
    if (actor) {
-      if (actor->isItem()) {
+      if (actor->getType() == F_PIT) {
+         msg = "You fall in to a pit.";
+         engine.downLevel();
+      }
+      else if (actor->isItem()) {
          msg = "You see here a "; 
          msg += actor->getName() + ".";
       }
       else if (actor->isDead()) {     
          msg = "There is a "; 
          msg += actor->getName() + " here.";
-      }
+      } 
       else { 
          msg = "You see a ";
          msg += actor->getName() + ".";
@@ -387,4 +393,24 @@ bool AI::drop(Actor *me, Actor *item) {
       return true;
    } else
       return false;
+}
+
+void GopherAI::update(Actor *me) {
+   TCODRandom *rng = TCODRandom::getInstance();   
+   if (rng->getInt(1, 100) <= 20)
+      digPit(me);
+   else
+      MonsterAI::update(me);
+}
+
+void GopherAI::digPit(Actor *me) {
+   Actor *pit;
+   
+   if ( !engine.getMap()->getActorAt(me->getX(), me->getY()) ) {
+      ActorFactory factory = ActorFactory();
+      pit = factory.generate(F_PIT);
+      pit->moveTo(me->getX(), me->getY());
+      engine.addActor(pit);
+      printf("I dug a pit!\n");
+   }      
 }

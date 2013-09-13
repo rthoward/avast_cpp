@@ -92,8 +92,8 @@ Actor *ActorFactory::generate(ActorType type, string name) {
       case M_GOPHER:
          myName = "gopher";
          ch = 'd';
-         color = TCODColor::darkYellow;
-         ai = new MonsterAI();
+         color = TCODColor::darkOrange;
+         ai = new GopherAI();
          destructible = new MonsterDestructible(10, 2, "loafer");
          attacker = new Attacker(3);
          break;
@@ -201,3 +201,4 @@ Actor *ActorFactory::genItem(ActorType type) {
 
    return actor;
 }
+

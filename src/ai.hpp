@@ -55,4 +55,13 @@ protected:
    int moveCount;
 };
 
+class GopherAI : public MonsterAI {
+
+public:
+   void update(Actor *me);
+
+protected:
+   void digPit(Actor *me);
+};
+
 #endif
