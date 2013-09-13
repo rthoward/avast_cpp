@@ -89,6 +89,14 @@ Actor *ActorFactory::generate(ActorType type, string name) {
          destructible = new MonsterDestructible(5, 0, "dead newt");
          attacker = new Attacker(1);
          break;
+      case M_GOPHER:
+         myName = "gopher";
+         ch = 'd';
+         color = TCODColor::darkYellow;
+         ai = new MonsterAI();
+         destructible = new MonsterDestructible(10, 2, "loafer");
+         attacker = new Attacker(3);
+         break;
       case F_STAIRS_UP:
          myName = "up stairs";
          ch = '<';
@@ -98,11 +106,17 @@ Actor *ActorFactory::generate(ActorType type, string name) {
          myName = "down stairs";
          ch = '>';
          color = TCODColor::white;
-      default:
+      case F_PIT:
+         myName = "pit";
+         ch = '^';
+         color = TCODColor::white;
          break;
+      default:
+         break;      
    }
 
    actor = new Actor(0, 0, ch, myName, color);
+   actor->setType(type);
 
    if (ai)
       actor->setAI(ai);
