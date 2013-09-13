@@ -7,6 +7,7 @@
 #include "container.hpp"
 #include "equipment.hpp"
 #include "equippable.hpp"
+#include "actor_list.hpp"
 #include "actor.hpp"
 #include "map.hpp"
 #include "engine.hpp"
@@ -120,6 +121,7 @@ Equippable* Actor::getEquippable() const           { return this->equippable; }
 Equipment* Actor::getEquipment() const             { return this->equipment; }
 bool Actor::getFovOnly() const                     { return this->fovOnly; }
 int Actor::getFloor() const                        { return this->floor; }
+ActorType Actor::getType() const                   { return this->type; }
 
 void Actor::setGlyph(int glyph)                    { this->ch = glyph; }
 void Actor::setName(string name)                   { this->name = name; }
@@ -133,3 +135,4 @@ void Actor::setEquippable(Equippable *equip)       { this->equippable = equip; }
 void Actor::setEquipment(Equipment *equipment)     { this->equipment = equipment; }
 void Actor::setFovOnly(bool fovOnly)               { this->fovOnly = fovOnly; }
 void Actor::setFloor(int floor)                    { this->floor = floor; }
+void Actor::setType(ActorType type)                { this->type = type; }

@@ -12,6 +12,7 @@ class Pickable;
 class Container;
 class Equippable;
 class Equipment;
+enum ActorType;
 
 class Actor {
 
@@ -48,6 +49,7 @@ public:
    bool getFovOnly() const;
    int getChar() const;
    int getFloor() const;
+   ActorType getType() const;
 
    // mutators
    void setGlyph(int glyph);
@@ -63,6 +65,7 @@ public:
    void setFovOnly(bool fovOnly);
    void setFloor(int floor);
    void addExp(int exp);
+   void setType(ActorType type);
 
 private:
 
@@ -78,6 +81,7 @@ private:
    int floor;
    int exp;
    int expLevel;
+   ActorType type;
 
    // compositional behavior objects
    Attacker *attacker;
