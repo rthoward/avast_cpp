@@ -49,7 +49,6 @@ public:
       TCODRandom *rng = TCODRandom::getInstance();
       float roll = rng->getFloat(bias, totalWeight);     
 
-      float currentWeight = totalWeight;
       vector<ActorRarity>::iterator iter;
       for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {
          roll -= iter->weight;
@@ -89,7 +88,6 @@ public:
       TCODRandom *rng = TCODRandom::getInstance();
       float roll = rng->getFloat(bias, totalWeight);     
 
-      float currentWeight = totalWeight;
       vector<ActorRarity>::iterator iter;
       for (iter = rarityList.begin(); iter != rarityList.end(); iter++) {
          roll -= iter->weight;
