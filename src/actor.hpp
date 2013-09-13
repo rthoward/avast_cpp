@@ -2,6 +2,7 @@
 #define __ACTOR_HPP__
 
 #include <string>
+#include "actor_list.hpp"
 using namespace std;
 
 // forward declarations
@@ -12,7 +13,6 @@ class Pickable;
 class Container;
 class Equippable;
 class Equipment;
-enum ActorType;
 
 class Actor {
 
