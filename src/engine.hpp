@@ -11,6 +11,7 @@ class Engine {
 
 private:
    TCODList<Actor *> actors;
+   TCODList<Actor *> futureActors;
    TCODList<Map *> maps;
    Actor *player;
    GUI *gui;
@@ -43,6 +44,7 @@ public:
    void render();
 
    void addActor(Actor *actor);
+   void addActorFuture(Actor *actor);
    void removeActor(Actor *actor);
    void sendToFront(Actor *actor);
    void sendToBack(Actor *actor);

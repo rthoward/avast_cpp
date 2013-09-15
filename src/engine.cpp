@@ -60,6 +60,11 @@ void Engine::update() {
    } else if (gameStatus == QUIT) {
       gui->message("See you next time.", TCODColor::white);
    }
+
+   if (futureActors.size() > 0) {
+      actors.addAll(futureActors);
+      futureActors.clear();
+   }
 }
 
 void Engine::render() {
@@ -85,6 +90,11 @@ void Engine::render() {
 void Engine::addActor(Actor *actor) {
    actor->setFloor(getCurrentDLevel());
    this->actors.push(actor);
+}
+
+void Engine::addActorFuture(Actor *actor) {
+   actor->setFloor(getCurrentDLevel());
+   this->futureActors.push(actor);
 }
 
 void Engine::removeActor(Actor *actor) {

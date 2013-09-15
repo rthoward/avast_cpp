@@ -8,6 +8,7 @@
 #include "actor_list.hpp"
 #include "gui.hpp"
 #include "player_stat.hpp"
+#include "actor_factory.hpp"
 #include "random_actor.hpp"
 #include "equipment.hpp"
 #include "map.hpp"
@@ -409,5 +410,5 @@ void GopherAI::digPit(Actor *me) {
    ActorFactory factory = ActorFactory();
    pit = factory.generate(F_PIT);
    pit->moveTo(me->getX(), me->getY());
-   engine.addActor(pit);
+   engine.addActorFuture(pit);
 }
