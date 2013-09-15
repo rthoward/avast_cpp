@@ -36,7 +36,6 @@ protected:
    int width, height;
    Tile *tiles;
    TCODMap *map;
-   ActorFactory *actorFactory;
    friend class BspListener;
 
    void dig(int x1, int y1, int x2, int y2);

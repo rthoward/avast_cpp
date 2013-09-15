@@ -53,7 +53,6 @@ Map::Map(int width, int height) : width(width), height(height) {
    tiles = new Tile[width * height];
    map = new TCODMap(width, height);
    TCODBsp bsp(0, 0, width, height);
-   actorFactory = new ActorFactory;
    bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
    BspListener listener(*this);
    bsp.traverseInvertedLevelOrder(&listener, NULL);
@@ -64,7 +63,6 @@ Map::Map(int width, int height) : width(width), height(height) {
 Map::~Map() {
    delete [] tiles;
    delete map;
-   delete actorFactory;
 }
 
 bool Map::isWall(int x, int y) const {
@@ -177,9 +175,7 @@ void Map::addMonster(int x, int y) {
 }
 
 void Map::addItems() {
-   TCODRandom *rng = TCODRandom::getInstance();
-
-   ActorFactory factory = ActorFactory();   
+   TCODRandom *rng = TCODRandom::getInstance();  
    Actor *item;
 
    int num_potions = rng->getInt(0, 20);
@@ -189,8 +185,8 @@ void Map::addItems() {
       engine.addActor(item);
    }
 
-   Actor *sword = factory.genEquipment(0, 0, W_STEEL_LONGSWORD);
-   Actor *bodyArmor = factory.genEquipment(0, 0, A_STEEL_BREASTPLATE);
+   Actor *sword = actorFactory.genEquipment(0, 0, W_STEEL_LONGSWORD);
+   Actor *bodyArmor = actorFactory.genEquipment(0, 0, A_STEEL_BREASTPLATE);
    moveActorRandom(sword);
    moveActorRandom(bodyArmor);
 
@@ -201,8 +197,8 @@ void Map::addItems() {
 void Map::addStaircases() {
    int currentFloor = engine.getCurrentDLevel();
 
-   Actor *upStaircase = actorFactory->generate(F_STAIRS_UP);
-   Actor *downStaircase = actorFactory->generate(F_STAIRS_DOWN);
+   Actor *upStaircase = actorFactory.generate(F_STAIRS_UP);
+   Actor *downStaircase = actorFactory.generate(F_STAIRS_DOWN);
    upStaircase->setFloor(currentFloor);
    downStaircase->setFloor(currentFloor);
  

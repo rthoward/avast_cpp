@@ -20,4 +20,6 @@ public:
    Actor *genItem(ActorType type);
 };
 
+extern ActorFactory actorFactory;
+
 #endif
