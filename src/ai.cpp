@@ -309,6 +309,8 @@ bool PlayerAI::shouldStop(Actor *me) {
 
 void PlayerAI::tryStaircase(Actor *me, bool up) {
    Actor *standing = engine.getMap()->getActorAt(me->getX(), me->getY());
+   if (standing == NULL)
+      return;
 
    if (up && standing->getChar() == '<') {
       engine.upLevel();
