@@ -399,9 +399,7 @@ bool AI::drop(Actor *me, Actor *item) {
 }
 
 void GopherAI::update(Actor *me) {
-   TCODRandom *rng = TCODRandom::getInstance();   
-   int diceRoll = rng->getInt(1, 100);
-   if (diceRoll <= 20)
+   if (diceRoll(5))
       digPit(me);
    else
       MonsterAI::update(me);

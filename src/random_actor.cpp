@@ -2,6 +2,16 @@
 #include "random_actor.hpp"
 #include "actor_factory.hpp"
 
+bool diceRoll(int percent) {
+   TCODRandom *rng = TCODRandom::getInstance();
+   if (percent > 100)
+      percent = 100;
+   else if (percent < 0)
+      percent = 0;
+
+   return rng->getInt(0, 100) <= percent;
+}
+
 ActorRarity::ActorRarity(ActorType type, float rarity) {
    this->type = type;
    this->rarity = rarity;

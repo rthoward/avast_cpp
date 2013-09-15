@@ -6,6 +6,8 @@
 #include <vector>
 using namespace std;
 
+bool diceRoll(int percent);
+
 class ActorRarity {
 public:
    ActorType type;
