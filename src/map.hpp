@@ -25,11 +25,14 @@ public:
 
    Actor* getActorAt(int x, int y) const;
    Actor* getItemAt(int x, int y)  const;
+   TCODList<Actor *> getActors() const;
 
    void addMonster(int x, int y);
    void addItems();
    void moveActorRandom(Actor *actor);
    void addStaircases();
+   void addActor(Actor *);
+   
 
 protected:
 
@@ -37,6 +40,7 @@ protected:
    Tile *tiles;
    TCODMap *map;
    friend class BspListener;
+   TCODList<Actor *> actors;
 
    void dig(int x1, int y1, int x2, int y2);
    void createRoom(bool first, int x1, int y1, int x2, int y2);

@@ -10,7 +10,6 @@ class PlayerStat;
 class Engine {
 
 private:
-   TCODList<Actor *> actors;
    TCODList<Actor *> futureActors;
    TCODList<Map *> maps;
    Actor *player;
@@ -52,7 +51,7 @@ public:
    bool upLevel();
    bool downLevel();
 
-   TCODList<Actor *> getActorList();
+   TCODList<Actor *> getActors();
    Actor* getPlayer();
    Map* getMap();
    TCOD_key_t getLastKey();
@@ -61,8 +60,8 @@ public:
    int getScreenHeight() const;
    GUI *getGUI();
    int getCurrentDLevel() const;
-   Actor *getDownStaircase() const;
-   Actor *getUpStaircase() const;
+   Actor *getDownStaircase();
+   Actor *getUpStaircase();
    PlayerStat *getPlayerStat() const;
    int getTurn() const;
 

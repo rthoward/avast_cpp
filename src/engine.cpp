@@ -10,6 +10,7 @@
 #include "actor_factory.hpp"
 #include "player_stat.hpp"
 #include <string>
+#include <stdio.h>
 
 Engine::Engine(int screenWidth, int screenHeight) {
    setStatus(STARTUP);
@@ -25,15 +26,13 @@ Engine::Engine(int screenWidth, int screenHeight) {
    std::string playerName = "Player";
    maxDLevel = currentDLevel = 1;
    player = factory.genPlayer(40, 25, playerName);
-   addActor(player);
-   maps.push(new Map(80, 43));
+   maps.push(new Map(80, 43));   
    gui = new GUI();
 
    gui->message("Welcome to the dungeons of danger!");
 }
 
 Engine::~Engine() {
-   actors.clearAndDelete();
    maps.clearAndDelete();
    delete gui;
 }
@@ -50,25 +49,32 @@ void Engine::update() {
    if (gameStatus == NEW_TURN) {
       turn++;
       playerStat->update();
+      TCODList<Actor *> actors = getActors();
+      int numUpdated = 0;
 
       for (Actor **iterator = actors.begin();
            iterator != actors.end(); iterator++) {
          Actor *actor = *iterator;
-         if (shouldUpdate(actor))
+         if (shouldUpdate(actor)) {
             actor->update();
+            numUpdated++;
+         }
+
+         printf("%d actors updated\n", numUpdated);
       }
    } else if (gameStatus == QUIT) {
       gui->message("See you next time.", TCODColor::white);
    }
 
    if (futureActors.size() > 0) {
-      actors.addAll(futureActors);
+      getActors().addAll(futureActors);
       futureActors.clear();
    }
 }
 
 void Engine::render() {
    TCODConsole::root->clear();
+   TCODList<Actor *> actors = getActors();
 
    getMap()->render();
    TCODConsole::root->print(1, screenHeight - 2, "HP : %d/%d | DLVL %d",
@@ -88,8 +94,7 @@ void Engine::render() {
 }
 
 void Engine::addActor(Actor *actor) {
-   actor->setFloor(getCurrentDLevel());
-   this->actors.push(actor);
+   this->getActors().push(actor);
 }
 
 void Engine::addActorFuture(Actor *actor) {
@@ -98,21 +103,21 @@ void Engine::addActorFuture(Actor *actor) {
 }
 
 void Engine::removeActor(Actor *actor) {
-   this->actors.remove(actor);
+   this->getActors().remove(actor);
 }
 
 void Engine::sendToFront(Actor *actor) {
-   actors.remove(actor);
-   actors.insertBefore(actor, 0);
+   getActors().remove(actor);
+   getActors().insertBefore(actor, 0);
 }
 
 void Engine::sendToBack(Actor *actor) {
-   actors.remove(actor);
-   actors.insertBefore(actor, actors.size());
+   getActors().remove(actor);
+   getActors().insertBefore(actor, getActors().size());
 }
 
-TCODList<Actor *> Engine::getActorList() {
-   return actors;
+TCODList<Actor *> Engine::getActors() {
+   return getMap()->getActors();
 }
 
 Actor* Engine::getPlayer() {
@@ -172,9 +177,7 @@ bool Engine::downLevel() {
 
 bool Engine::shouldRender(Actor *actor) {
 
-   if (actor->getFloor() != currentDLevel)
-      return false;
-   else if (actor == player)
+   if (actor == player)
       return false;
 
    int x, y;
@@ -193,10 +196,12 @@ bool Engine::shouldRender(Actor *actor) {
 }
 
 bool Engine::shouldUpdate(Actor *actor) {
-   return (actor->getFloor() == getCurrentDLevel() && actor != player);
+   return (actor != player);
 }
 
-Actor *Engine::getDownStaircase() const {
+Actor *Engine::getDownStaircase() {
+   TCODList<Actor *> actors = getActors();
+
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
       if (actor->getChar() == '>')
@@ -206,7 +211,8 @@ Actor *Engine::getDownStaircase() const {
    return NULL;
 }
 
-Actor *Engine::getUpStaircase() const {
+Actor *Engine::getUpStaircase() {
+   TCODList<Actor *> actors = getActors();
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
       if (actor->getChar() == '<')

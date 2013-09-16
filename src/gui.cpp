@@ -99,7 +99,7 @@ void GUI::stats(int x, int y, int width) const {
 void GUI::debug(int x, int y, int width) const {
    con->setDefaultForeground(TCODColor::white);
    con->printEx(x, y, TCOD_BKGND_NONE, TCOD_LEFT,
-         "actors: %d", engine.getActorList().size());
+         "actors: %d", engine.getActors().size());
    con->printEx(x, y + 1, TCOD_BKGND_NONE, TCOD_LEFT,
          "turn: %d", engine.getTurn());
 }

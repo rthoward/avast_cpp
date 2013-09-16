@@ -51,6 +51,7 @@ private:
 
 Map::Map(int width, int height) : width(width), height(height) {
    tiles = new Tile[width * height];
+   actors = TCODList<Actor *>();
    map = new TCODMap(width, height);
    TCODBsp bsp(0, 0, width, height);
    bsp.splitRecursive(NULL, 8, ROOM_MAX_SIZE, ROOM_MAX_SIZE, 1.5f, 1.5f);
@@ -61,6 +62,7 @@ Map::Map(int width, int height) : width(width), height(height) {
 }
 
 Map::~Map() {
+   actors.clearAndDelete();
    delete [] tiles;
    delete map;
 }
@@ -171,7 +173,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 void Map::addMonster(int x, int y) {   
    Actor *monster = randomMonster.getRandomMonster();   
    monster->moveTo(x, y);
-   engine.addActor(monster);
+   addActor(monster);
 }
 
 void Map::addItems() {
@@ -182,7 +184,7 @@ void Map::addItems() {
    for (int i = 0; i < num_potions; i++) {
       item = randomItem.getRandomItem();
       moveActorRandom(item);
-      engine.addActor(item);
+      addActor(item);
    }
 
    Actor *sword = actorFactory.genEquipment(0, 0, W_STEEL_LONGSWORD);
@@ -190,8 +192,8 @@ void Map::addItems() {
    moveActorRandom(sword);
    moveActorRandom(bodyArmor);
 
-   engine.addActor(sword);
-   engine.addActor(bodyArmor);
+   addActor(sword);
+   addActor(bodyArmor);
 }
 
 void Map::addStaircases() {
@@ -204,8 +206,8 @@ void Map::addStaircases() {
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());   
    moveActorRandom(downStaircase);
-   engine.addActor(upStaircase);
-   engine.addActor(downStaircase);
+   addActor(upStaircase);
+   addActor(downStaircase);
 }
 
 void Map::moveActorRandom(Actor *actor) {
@@ -225,15 +227,12 @@ void Map::moveActorRandom(Actor *actor) {
 
 Actor* Map::getActorAt(int x, int y) const {
 
-   TCODList<Actor *> actors = engine.getActorList();
-
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
       if (actor == NULL)
          continue;
       else if (actor != engine.getPlayer() &&
-               actor->getFloor() == engine.getCurrentDLevel() &&
-               actor->getX() == x && actor->getY() == y)
+                  actor->getX() == x && actor->getY() == y)
          return actor;
    }
    return NULL;
@@ -248,6 +247,13 @@ Actor* Map::getItemAt(int x, int y) const {
    return actor;
 }
 
+TCODList<Actor *> Map::getActors() const {
+   return this->actors;
+}
+
+void Map::addActor(Actor *actor) {
+   actors.push(actor);
+}
 bool Map::inMap(int x, int y) const {
    return ( (x < width) && (y < height) );
 }

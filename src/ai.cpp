@@ -281,7 +281,7 @@ PlayerAI::AIState PlayerAI::chooseAutorun() {
 }
 
 bool PlayerAI::shouldStop(Actor *me) {
-   TCODList<Actor *> actors = engine.getActorList();
+   TCODList<Actor *> actors = engine.getActors();
 
    // check if any potential attackers entered FOV
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
