@@ -212,14 +212,15 @@ Actor *PlayerAI::chooseFromInventory(Actor *me, string filter) {
    int y = 1;
 
    TCODList<Actor *> inventory = me->getContainer()->getInventory();
+   TCODList<Actor *> sublist = new TCODList<Actor *>;
    Actor *item;
 
+   // apply filter to create sublist
    for (Actor **iter = inventory.begin(); iter != inventory.end(); iter++) {
       item = *iter;
-      
+
       if (item == NULL)       continue;
 
-      // apply necessary filters
       if (filter == "equipment") {
          if (!item->isEquipment())
             continue;
@@ -227,6 +228,13 @@ Actor *PlayerAI::chooseFromInventory(Actor *me, string filter) {
          if (!me->getEquipment()->isEquipped(me, item))
             continue;
       }
+
+      sublist.push(item);
+   }
+
+   // dump sublist contents to screen
+   for (Actor **iter = sublist.begin(); iter != sublist.end(); iter++) {
+      item = *iter;
 
       string itemName = item->getName();
       if (me->getEquipment()->isEquipped(me, item))
@@ -247,7 +255,7 @@ Actor *PlayerAI::chooseFromInventory(Actor *me, string filter) {
    if (key.vk == TCODK_CHAR) {
       int itemIndex = key.c - 'a';
       if (itemIndex >= 0 && itemIndex < inventory.size())
-         return inventory.get(itemIndex);
+         return sublist.get(itemIndex);
    }
 
    return NULL;
