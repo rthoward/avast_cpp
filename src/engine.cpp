@@ -51,8 +51,9 @@ void Engine::update() {
       turn++;
       playerStat->update();
 
-      for (Actor **iterator = actors.begin();
-           iterator != actors.end(); iterator++) {
+      TCODList<Actor*> mapActors = getMap()->getActors();
+      for (Actor **iterator = mapActors.begin();
+           iterator != mapActors.end(); iterator++) {
          Actor *actor = *iterator;
          if (shouldUpdate(actor))
             actor->update();
@@ -77,7 +78,8 @@ void Engine::render() {
          currentDLevel);
 
    // render actors
-   for (Actor **iter = actors.end() - 1; iter != actors.begin(); iter--) {
+   TCODList<Actor*> mapActors = getMap()->getActors();
+   for (Actor **iter = mapActors.end() - 1; iter != mapActors.begin(); iter--) {
       Actor *actor = *iter;
       if (shouldRender(actor))
          actor->render();
@@ -172,9 +174,7 @@ bool Engine::downLevel() {
 
 bool Engine::shouldRender(Actor *actor) {
 
-   if (actor->getFloor() != currentDLevel)
-      return false;
-   else if (actor == player)
+   if (actor == player)
       return false;
 
    int x, y;
@@ -193,7 +193,7 @@ bool Engine::shouldRender(Actor *actor) {
 }
 
 bool Engine::shouldUpdate(Actor *actor) {
-   return (actor->getFloor() == getCurrentDLevel() && actor != player);
+   return (actor != player);
 }
 
 Actor *Engine::getDownStaircase() const {

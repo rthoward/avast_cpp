@@ -171,7 +171,7 @@ void Map::createRoom(bool first, int x1, int y1, int x2, int y2) {
 void Map::addMonster(int x, int y) {   
    Actor *monster = randomMonster.getRandomMonster();   
    monster->moveTo(x, y);
-   engine.addActor(monster);
+   actors.push(monster);
 }
 
 void Map::addItems() {
@@ -182,7 +182,7 @@ void Map::addItems() {
    for (int i = 0; i < num_potions; i++) {
       item = randomItem.getRandomItem();
       moveActorRandom(item);
-      engine.addActor(item);
+      actors.push(item);
    }
 
    Actor *sword = actorFactory.genEquipment(0, 0, W_STEEL_LONGSWORD);
@@ -190,8 +190,8 @@ void Map::addItems() {
    moveActorRandom(sword);
    moveActorRandom(bodyArmor);
 
-   engine.addActor(sword);
-   engine.addActor(bodyArmor);
+   actors.push(sword);
+   actors.push(bodyArmor);
 }
 
 void Map::addStaircases() {
@@ -204,8 +204,8 @@ void Map::addStaircases() {
  
    upStaircase->moveTo(engine.getPlayer()->getX(), engine.getPlayer()->getY());   
    moveActorRandom(downStaircase);
-   engine.addActor(upStaircase);
-   engine.addActor(downStaircase);
+   actors.push(upStaircase);
+   actors.push(downStaircase);
 }
 
 void Map::moveActorRandom(Actor *actor) {
@@ -223,9 +223,11 @@ void Map::moveActorRandom(Actor *actor) {
    }
 }
 
-Actor* Map::getActorAt(int x, int y) const {
+TCODList<Actor*> Map::getActors() const {
+   return this->actors;
+}
 
-   TCODList<Actor *> actors = engine.getActorList();
+Actor* Map::getActorAt(int x, int y) const {
 
    for (Actor **iter = actors.begin(); iter != actors.end(); iter++) {
       Actor *actor = *iter;
